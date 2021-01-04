@@ -1,9 +1,9 @@
-###Observabilidad con microservicios reactivos,
+### Observabilidad con microservicios reactivos,
 
 A travez de la ultima década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación funcional, la capacidad exponencial de computo multi hilo y procesamiento en la nube, están teniendo un impacto profundo en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes empresariales.
 Como ya esta definido en el manifiesto reactivo (link) los sistemas reactivos proveen elasticidad(escalan vertical y horizontalmente), resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta disponibilidad(Responden en tiempos aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería asíncrona). (Imagen)
 
-##JVM en la nube y su complejidad inherente
+## JVM en la nube y su complejidad inherente
 Java (y la maquina virtual de Java) se ha consolidado como la plataforma preferida en entornos empresariales, lamentablemente como lo hemos visto con el proyecto loom() la evolución del lenguaje no ha priorizado las APIs enfocadas a programación reactiva, es ahí donde Vert.x y Quarkus brillan, proveyendo no solo API’s que no bloquean el hilo en el que se esta ejecutando, si que ademas brindan plugins que facilitan la programación reactiva y funcional.
 El precio y impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kamban) es alto debido a la complejidad asociada al desarrollo de estos sistemas, planeamiento de funcionalidades a brindar, y al estándar actual de despliegue de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por un lado monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a los desarrolladores con mas señoría …  esto como lo veo yo, no es mas que otra oportunidad para actualizar dinámicas de equipos de trabajo en donde parte de las responsabilidades de pueden transmitir por medio de tecnologías simples, de la misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirió a los desarrollos de frontend cuando los navegadores adquirieron mas capacidad de procesamiento.
 
@@ -11,11 +11,11 @@ El precio y impacto que tiene esto en los equipos de desarrollo ágiles (como Sc
 
 
 
-#Introducir sistemas reactivos
+# Introducir sistemas reactivos
 Hablar de verte y sus usos
 Simple conceptos acerca de que siempre se espera finalizar el span y su correspondiente
 //codigo
-#TDD
+# TDD
 correlación con Mockspan
 
 Hablar de los problemas introducidos por microservices  en la organización

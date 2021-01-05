@@ -7,7 +7,6 @@ Como ya esta definido en el manifiesto reactivo (link) los sistemas reactivos pr
 Java (y la maquina virtual de Java) se ha consolidado como la plataforma preferida en entornos empresariales, lamentablemente como lo hemos visto con el proyecto loom() la evolución del lenguaje no ha priorizado las API enfocadas a programación reactiva, es ahí donde Vert.x y Quarkus brillan, proveyendo no solo API’s que no bloquean el hilo en el que se está ejecutando, si que además brindan plugins que facilitan la programación reactiva y funcional.
 El precio e impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kanban) es alto debido a la complejidad asociada al desarrollo de estos sistemas, planeamiento de funcionalidades a brindar, y al estándar actual de despliegue de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por un lado monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a los desarrolladores con más señoría …  Esto como lo veo yo, no es más que otra oportunidad para actualizar dinámicas de equipos de trabajo en donde parte de las responsabilidades se pueden transmitir por medio de tecnologías simples, de la misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirió a los desarrollos de frontend cuando los navegadores adquirieron más capacidad de procesamiento.
 
-
 ### Flujos Reactivos[^3]
 
 Los flujos reactivos son una iniciativa para proporcionar un estándar para el procesamiento de flujo asíncrono con contrapresión(*back-pressure*). Proporciona un conjunto mínimo de interfaces y protocolos que describen las operaciones y entidades para lograr los flujos de datos asincrónicos con contrapresión sin bloqueo. No define los operadores que manipulan los flujos, y se utiliza principalmente como una capa de interoperabilidad. Esta iniciativa es apoyada por Netflix, Lightbend y Red Hat(Uno de los mayores contribuidores de Vert.x y Kubernetes), entre otros.
@@ -58,7 +57,48 @@ Los patrones de diseño *RESTful*[^5] son comunes en el mundo de los microservic
 
 El *middleware* orientado a mensajes (MOM[^6]) es una solución más razonable para los problemas de integración y mensajería en este campo, especialmente cuando se trata de microservicios expuestos por sistemas host y conectados a través de MOM. Se puede usar una combinación de solicitud/respuesta en REST y publicación/suscripción de mensajes para satisfacer las necesidades de negocio.
 
-#### Opentracing, OpenTelemetry & Jaeger[^11]
+
+### Quarkus
+
+Quarkus es un fullstack framework de trabajo Java nativo de Kubernetes creado para máquinas virtuales Java (JVM) y compilación nativa, que optimiza Java específicamente para contenedores y le permite convertirse en una plataforma eficaz para entornos sin servidor, en la nube y Kubernetes.
+
+Quarkus está diseñado para funcionar con estándares, marcos y bibliotecas populares de Java como Eclipse MicroProfile y Vert.x, así como con Apache Kafka, RESTEasy (JAX-RS), Hibernate ORM (JPA), Spring, Infinispan, Camel y muchos más.
+
+La solución de inyección de dependencias de Quarkus se basa en CDI (inyección de contextos y dependencias) e incluye un marco de extensión para ampliar la funcionalidad y configurar, arrancar e integrar un marco en su aplicación. Agregar una extensión es tan fácil como agregar una dependencia, o puede usar las herramientas de Quarkus.
+
+También proporciona la información correcta a GraalVM (una máquina virtual universal para ejecutar aplicaciones escritas en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de su aplicación.
+
+### Vert.x
+
+La esencia de Eclipse Vert.x es procesar eventos asincrónicos, principalmente provenientes de E / S sin bloqueo, y el modelo de subprocesos es procesar eventos en un *bucle de eventos*.
+
+Vert.x es un kit de herramientas y no un marco: no proporciona una base predefinida para su aplicación, por lo que puede usar Vert.x como una biblioteca dentro de una base de código más grande. Vert.x no tiene muchas opiniones sobre las herramientas de compilación que debe utilizar, cómo desea estructurar su código, cómo piensa empaquetarlo y desplegarlo, etc. Una aplicación Vert.x es un conjunto de módulos que proporciona exactamente lo que necesita , y nada más. Si no necesita acceder a una base de datos, su proyecto no necesita depender de las API relacionadas con la base de datos.
+
+Vert.x está estructurado de la siguiente manera:
+
+*Vertx-core*, proporciona la programación síncrona de API, E / S sin bloqueo, transmisión y acceso conveniente a protocolos en red como TCP, UDP, DNS, HTTP o WebSockets,
+
+*Vert.x stack(modulos proporcionados por la comunidad),* como una mejor API web (vertx-web) o bases de datos (vertx-redis, vertx-mongo, etc.),
+
+*Extensiones*: un amplio sistema de proyectos que brindan incluso más funcionalidades, como
+
+conectando con Apache Cassandra, E / S sin bloqueo para comunicarse entre procesos del sistema, etc.
+
+Vert.x es políglota ya que admite la mayoría de los lenguajes JVM populares y relacionados: JavaScript, Ruby, Kotlin, Scala, Groovy y más. Curiosamente, el soporte de estos lenguajes no es solo a través de la interoperabilidad de estos lenguajes con Java. Se están generando enlaces idiomáticos, para que pueda escribir código Vert.x en estos idiomas que aún se siente natural. Por ejemplo, los enlaces Scala usan las futuras API de Scala[^14]. Y, por supuesto, puede mezclar y combinar diferentes lenguajes compatibles dentro de la misma aplicación Vert.x.
+
+#### Reactor (Patrón de diseño) y el Bucle de eventos
+
+Desde la wikipedia[^15] vemos que: "El patrón de diseño reactor es un patrón de programación concurrente para manejar los pedidos de servicio entregados de forma concurrente a un manejador de servicio desde una o más entradas. El manejador de servicio demultiplexa los pedidos entrantes y los entrega de forma sincrónica a los manejadores de pedidos asociados."
+
+![](images/media/image8.png){width="5.5in" height="2.6139807524059493in"}
+
+Ahora bien, Eclipse Vert.x implementa un patrón multi-reactor soportado por eventloops. En el Reactor, existe un flujo de eventos delegados a los manejadores por un hilo llamado eventloop(bucle de eventos). Debido a que el bucle de eventos observa el flujo de eventos y llama a los controladores(handlers) para manejar el evento, es importante que NUNCA bloquee el bucle de eventos. Si los controladores no están disponibles para el bucle de eventos, entonces el bucle de eventos tiene que esperar; por lo tanto, efectivamente llamamos al evento loop bloqueado.![](images/media/image9.png){width="5.5in" height="3.0584405074365706in"}
+
+Eclipse Vert.x implementa un patrón multi-reactor donde, por defecto, cada núcleo de CPU tiene dos bucles de eventos. Esto le da a las aplicaciones que usan Vert.x la capacidad de respuesta necesaria cuando aumenta el número de eventos.
+
+Otro concepto importante es el bus de eventos, que es cómo las vértices(*verticles*: unidades mínimas de procesamiento de Vert.x) pueden comunicarse entre sí de una manera de publicación-suscripción. Los vértices se registran en el bus de eventos y se les da una dirección para escuchar. El bus de eventos permite escalar los vértices, ya que solo necesitamos especificar en qué dirección un vértice escucha los eventos y dónde debe publicar esos eventos.
+
+## Opentracing, OpenTelemetry & Jaeger[^11]
 
 Mientras que OpenTelemetry agrupa una serie de herramientas y APIs enfocadas a generar, colectar y exportar data telemétrica(metricas, logs y trazas) de software nativo de la nube, Opentracing Es una API independiente del proveedor a utilizar, para ayudar a los desarrolladores a instrumentar fácilmente el rastreo en su base de código. Está abierto porque ninguna empresa lo posee. De hecho, muchas compañías de herramientas de rastreo están apoyando OpenTracing como una forma estandarizada de instrumentar el rastreo distribuido, parte de los core asociado a Jaeger usa esta API.
 
@@ -78,7 +118,7 @@ El SpanContext es la forma serializable de un Span. Permite que la información 
 
 #### Jaeger
 
-Jaeger es el corazón de la observabilidad en este trabajo de grado, desarrollado por Uber para suplir eficientemente monitoreo a su compleja arquitectura de microservicios. A pesar de que ElasticSearch tiene una herramienta similar llamada APM[^10], Jaeger es de código abierto y esta estrictamente ligada con los estándares dictados por la CNCF. Jaeger se utiliza para monitorear y solucionar problemas de entornos complejos de microservicios usando rastreo distribuido.
+Jaeger fue originalmente desarrollado por Uber para suplir eficientemente monitoreo a su compleja arquitectura de microservicios. A pesar de que ElasticSearch tiene una herramienta similar llamada APM[^10], Jaeger es de código abierto y está estrictamente ligada con los estándares dictados por la CNCF. Jaeger se utiliza para monitorear y solucionar problemas de entornos complejos de microservicios usando rastreo distribuido.
 
 El rastreo distribuido es una forma de ver y comprender toda la cadena de eventos en una interacción compleja entre microservicios.
 
@@ -110,13 +150,52 @@ Los *Collectors* requieren un backend de almacenamiento persistente, por lo que 
 
 *Jaeger Console* es una interfaz de usuario que le permite visualizar sus datos de rastreo distribuidos.
 
-### Herramientas y estándares
+## Plataforma de observablidad
 
-#### CNCF
+* Desplegar el contendor de Elasticsearch
+```shell
+docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+```
+
+* Desplegar el contendor de Kibana
+```shell
+docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.9.1
+```
+
+* Desplegar el contendor de Jaeger
+```shell
+docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 16686:16686 jaegertracing/all-in-one:1.19
+```
+
+* Verificar la instrumentación con la aplicación ejemplo de Jaeger
+```shell
+docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_PORT=6831 -p8080-8083:8080-8083 jaegertracing/example-hotrod:1.19 all
+```
+
+* Verificar  los indices en ElasticSearch
+```shell
+curl -X GET "localhost:9200/_cat/indices?v"
+```
+
+* Verificar el mapeo en jaeger
+```shell
+curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
+```
+
+* Verificar  el mapeo de algun campo de tipo entero
+```shell
+curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
+```
+  
+//TODO Vert.x app instrumentada
+
+## Herramientas y estándares
+
+### CNCF
 
 Como indicado en su sitio web[^7], La Cloud Native Computing Foundation (CNCF) aloja componentes críticos de la infraestructura tecnológica global cuando se trabaja con tecnologías alojadas en la nube. CNCF reúne a los principales desarrolladores, usuarios finales y proveedores del mundo y ejecuta las conferencias de desarrolladores de código abierto más grandes. CNCF es parte de la Fundación Linux sin fines de lucro.![](images/media/image4.png){width="5.5in" height="4.313889982502187in"}
 
-#### Containers (Docker)
+### Containers (Docker)
 
 Docker es una herramienta diseñada para facilitar la creación, implementación y ejecución de aplicaciones mediante el uso de contenedores. Los contenedores permiten a un desarrollador empaquetar una aplicación con todas las partes que necesita, como bibliotecas y otras dependencias, y desplegarla como un paquete. Al hacerlo, gracias al contenedor, el desarrollador puede estar seguro de que la aplicación se ejecutará en cualquier otra máquina Linux, independientemente de cualquier configuración personalizada que pueda tener la máquina que podría diferir de la máquina utilizada para escribir y probar el código.
 
@@ -126,17 +205,15 @@ En cierto modo, Docker es un poco como una máquina virtual. Pero a diferencia d
 
 Y lo más importante, Docker es de código abierto. Esto significa que cualquiera puede contribuir a Docker y extenderlo para satisfacer sus propias necesidades si necesitan funciones adicionales que no están disponibles de fábrica.
 
-
-
-6.5.5 ElasticSearch[^12]
+### ElasticSearch[^12]
 
 Para centralización del monitoreo y observabilidad usare Elasticsearch, Elasticsearch es un motor de búsqueda y análisis de código abierto distribuido para todo tipo de datos, incluidos los textuales, numéricos, geoespaciales, estructurados y no estructurados. Elasticsearch se basa en Apache Lucene y fue lanzado por primera vez en 2010 por Elasticsearch N.V. (ahora conocido como Elastic). Conocido por sus API REST simples, naturaleza distribuida, velocidad y escalabilidad, Elasticsearch es el componente central de Elastic Stack, un conjunto de herramientas de código abierto para la ingestión, enriquecimiento, almacenamiento, análisis y visualización de datos. Conocido comúnmente como ELK Stack (después de Elasticsearch, Logstash y Kibana), Elastic Stack ahora incluye una rica colección de agentes de envío livianos conocidos como Beats para enviar datos a Elasticsearch.
 
-*6.5.5.1 MetricBeat*
+#### MetricBeat*
 
 También parte de ElasticSearch, Metricbeat es un cargador ligero que se puede instalar en los servidores para recopilar periódicamente métricas del sistema operativo y de los servicios que se ejecutan en el servidor, en este caso, containers. Metricbeat toma las métricas y estadísticas que recopila y las envía a la salida que especifique, como Elasticsearch o Logstash.
 
-*6.5.5.2 Kibana*
+#### Kibana*
 
 También parte de ElasticSearch, Kibana es una aplicación frontend de código abierto que se encuentra en la parte superior del Elastic Stack, proporcionando capacidades de búsqueda y visualización de datos para datos indexados en Elasticsearch. Conocida comúnmente como la herramienta de gráficos para Elastic Stack. La idea es usar Kibana para:
 
@@ -156,7 +233,7 @@ Combinando estos elementos visuales para luego ser compartidos a través del nav
 >
 > Análisis de negocio.
 
-#### Kubernetes
+### Kubernetes
 
 Kubernetes (también conocido como k8s o \"kube\") es una plataforma de orquestación de contenedores de código abierto que automatiza muchos de los procesos manuales involucrados en la implementación, administración y escalado de aplicaciones en contenedores.
 
@@ -182,49 +259,9 @@ Con Kubernetes se puede:
 >
 > Verificar el estado y autorecuperacion las aplicaciones con colocación automática, inicio automático, autorreplicación y escalado automático.
 
-#### Redhat Openshift
+### Redhat Openshift
 
 De acuerdo con la Wikipedia[^13]; "OpenShift, formalmente llamado Openshift Container Platform (OCP), es un producto de computación en la nube de plataforma como servicio de Red Hat. Los desarrolladores pueden usar Git para desplegar sus aplicaciones Web en los diferentes lenguajes de la plataforma.", pero toda su extensa funcionalidad la podríamos resumir en Openshift es la versión empresarial de Kubernetes hecha por RedHat, Inc.![](images/media/image7.png){width="5.5in" height="4.097222222222222in"}
-
-#### Quarkus
-
-Quarkus es un fullstack framework de trabajo Java nativo de Kubernetes creado para máquinas virtuales Java (JVM) y compilación nativa, que optimiza Java específicamente para contenedores y le permite convertirse en una plataforma eficaz para entornos sin servidor, en la nube y Kubernetes.
-
-Quarkus está diseñado para funcionar con estándares, marcos y bibliotecas populares de Java como Eclipse MicroProfile y Vert.x, así como con Apache Kafka, RESTEasy (JAX-RS), Hibernate ORM (JPA), Spring, Infinispan, Camel y muchos más.
-
-La solución de inyección de dependencias de Quarkus se basa en CDI (inyección de contextos y dependencias) e incluye un marco de extensión para ampliar la funcionalidad y configurar, arrancar e integrar un marco en su aplicación. Agregar una extensión es tan fácil como agregar una dependencia, o puede usar las herramientas de Quarkus.
-
-También proporciona la información correcta a GraalVM (una máquina virtual universal para ejecutar aplicaciones escritas en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de su aplicación.
-
-#### Vert.x
-
-La esencia de Eclipse Vert.x es procesar eventos asincrónicos, principalmente provenientes de E / S sin bloqueo, y el modelo de subprocesos es procesar eventos en un *bucle de eventos*.
-
-Vert.x es un kit de herramientas y no un marco: no proporciona una base predefinida para su aplicación, por lo que puede usar Vert.x como una biblioteca dentro de una base de código más grande. Vert.x no tiene muchas opiniones sobre las herramientas de compilación que debe utilizar, cómo desea estructurar su código, cómo piensa empaquetarlo y desplegarlo, etc. Una aplicación Vert.x es un conjunto de módulos que proporciona exactamente lo que necesita , y nada más. Si no necesita acceder a una base de datos, su proyecto no necesita depender de las API relacionadas con la base de datos.
-
-Vert.x está estructurado de la siguiente manera:
-
-*Vertx-core*, proporciona la programación síncrona de API, E / S sin bloqueo, transmisión y acceso conveniente a protocolos en red como TCP, UDP, DNS, HTTP o WebSockets,
-
-*Vert.x stack(modulos proporcionados por la comunidad),* como una mejor API web (vertx-web) o bases de datos (vertx-redis, vertx-mongo, etc.),
-
-*Extensiones*: un amplio sistema de proyectos que brindan incluso más funcionalidades, como
-
-conectando con Apache Cassandra, E / S sin bloqueo para comunicarse entre procesos del sistema, etc.
-
-Vert.x es políglota ya que admite la mayoría de los lenguajes JVM populares y relacionados: JavaScript, Ruby, Kotlin, Scala, Groovy y más. Curiosamente, el soporte de estos lenguajes no es solo a través de la interoperabilidad de estos lenguajes con Java. Se están generando enlaces idiomáticos, para que pueda escribir código Vert.x en estos idiomas que aún se siente natural. Por ejemplo, los enlaces Scala usan las futuras API de Scala[^14]. Y, por supuesto, puede mezclar y combinar diferentes lenguajes compatibles dentro de la misma aplicación Vert.x.
-
-#### Reactor (Patrón de diseño) y el Bucle de eventos
-
-Desde la wikipedia[^15] vemos que: "El patrón de diseño reactor es un patrón de programación concurrente para manejar los pedidos de servicio entregados de forma concurrente a un manejador de servicio desde una o más entradas. El manejador de servicio demultiplexa los pedidos entrantes y los entrega de forma sincrónica a los manejadores de pedidos asociados."
-
-![](images/media/image8.png){width="5.5in" height="2.6139807524059493in"}
-
-Ahora bien, Eclipse Vert.x implementa un patrón multi-reactor soportado por eventloops. En el Reactor, existe un flujo de eventos delegados a los manejadores por un hilo llamado eventloop(bucle de eventos). Debido a que el bucle de eventos observa el flujo de eventos y llama a los controladores(handlers) para manejar el evento, es importante que NUNCA bloquee el bucle de eventos. Si los controladores no están disponibles para el bucle de eventos, entonces el bucle de eventos tiene que esperar; por lo tanto, efectivamente llamamos al evento loop bloqueado.![](images/media/image9.png){width="5.5in" height="3.0584405074365706in"}
-
-Eclipse Vert.x implementa un patrón multi-reactor donde, por defecto, cada núcleo de CPU tiene dos bucles de eventos. Esto le da a las aplicaciones que usan Vert.x la capacidad de respuesta necesaria cuando aumenta el número de eventos.
-
-Otro concepto importante es el bus de eventos, que es cómo las vértices(*verticles*: unidades mínimas de procesamiento de Vert.x) pueden comunicarse entre sí de una manera de publicación-suscripción. Los vértices se registran en el bus de eventos y se les da una dirección para escuchar. El bus de eventos permite escalar los vértices, ya que solo necesitamos especificar en qué dirección un vértice escucha los eventos y dónde debe publicar esos eventos.
 
 ### Kanban y Scrum
 

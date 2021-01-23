@@ -122,6 +122,13 @@ mensajería en este campo, especialmente cuando se trata de microservicios expue
 través de MOM. Se puede usar una combinación de solicitud/respuesta en REST y publicación/suscripción de mensajes para
 satisfacer las necesidades de negocio.
 
+#### Observabilidad y Frameworks asíncronos en la JVM
+
+A la hora de aplicar observabilidad con Jaeger cuando trabajamos con librerías y frameworks en la máquina virtual de java(jvm) hemos de ser precavidos y algunas veces desaprender y reevaluar "Las mejores practicas", por ejemplo:
+Instrumentando el async-http-client hemos de encontrar que si combinamos este poderoso framework con APIs nativas como NEO, o usando autocloseable 
+//TODO ejemplo simple combinado con 
+
+
 ### Quarkus
 
 Quarkus es un fullstack framework de trabajo Java nativo de Kubernetes creado para máquinas virtuales Java (JVM) y
@@ -137,6 +144,12 @@ una extensión es tan fácil como agregar una dependencia, o puede usar las herr
 
 También proporciona la información correcta a GraalVM (una máquina virtual universal para ejecutar aplicaciones escritas
 en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de su aplicación.
+
+#### Instrumentación en Quarkus
+
+Al aplicar observabilidad en Quarkus 
+//TODO simplificar y aplicar al la plataforma de observabilidad 
+//TODO Eclipse MicroProfile OpenTracing
 
 ### Vert.x
 

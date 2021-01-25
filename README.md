@@ -124,10 +124,10 @@ satisfacer las necesidades de negocio.
 
 #### Observabilidad y Frameworks asíncronos en la JVM
 
-A la hora de aplicar observabilidad con Jaeger cuando trabajamos con librerías y frameworks en la máquina virtual de java(jvm) hemos de ser precavidos y algunas veces desaprender y reevaluar "Las mejores practicas", por ejemplo:
-Instrumentando el async-http-client hemos de encontrar que si combinamos este poderoso framework con APIs nativas como NEO, o usando autocloseable 
-//TODO ejemplo simple combinado con 
-
+A la hora de aplicar observabilidad con Jaeger cuando trabajamos con librerías y frameworks en la máquina virtual de
+java(jvm) hemos de ser precavidos y algunas veces desaprender y reevaluar "Las mejores practicas", por ejemplo:
+Instrumentando el async-http-client hemos de encontrar que si combinamos este poderoso framework con APIs nativas como
+NEO, o usando autocloseable //TODO ejemplo simple combinado con
 
 ### Quarkus
 
@@ -147,9 +147,28 @@ en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de
 
 #### Instrumentación en Quarkus
 
-Al aplicar observabilidad en Quarkus 
-//TODO simplificar y aplicar al la plataforma de observabilidad 
-//TODO Eclipse MicroProfile OpenTracing
+Al aplicar instrumentación en Quarkus (usaremos la aplicación instrumentada de los manuales de Quarkus y la extenderemos
+para ilustrar conceptos https://quarkus.io/guides/opentracing) veremos que a diferencia de con Vert.x tendemos menos
+control con configuraciones customizadas, pero muchas de las cosas requeridas para la mayoría de proyectos estarán
+listas (out-of-the-box) si no podemos hacer uso de los scopes:
+
+```java
+import javax.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.opentracing.Traced;
+
+@Traced
+@ApplicationScoped
+public class FrancophoneService {
+
+    public String bonjour() {
+        return "bonjour";
+    }
+}
+
+```
+
+//TODO JDBC //TODO Eclipse MicroProfile OpenTracing
 
 ### Vert.x
 
@@ -300,7 +319,7 @@ docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elast
 * Desplegar el contendor de Jaeger
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 16686:16686 jaegertracing/all-in-one:1.19
+docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268  -p 16686:16686 jaegertracing/all-in-one:latest
 ```
 
 * Verificar la instrumentación con la aplicación ejemplo de Jaeger
@@ -327,7 +346,20 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
 curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
 ```
 
-//TODO Vert.x app instrumentada
+* Iniciar la aplicación de quarkus ya instrumentada (desde la raiz de este proyecto ```shell cd ./quarkus ```
+
+```shell
+./mvnw compile quarkus:dev
+
+```
+
+- Si en lugar de por configuración quisiéremos que la aplicación se comunique con Jaeger via variables de entorno,
+  usaríamos
+
+```shell
+./mvnw compile quarkus:dev -Djvm.args="-DJAEGER_SERVICE_NAME=myservice -DJAEGER_SAMPLER_TYPE=const -DJAEGER_SAMPLER_PARAM=1"
+
+```
 
 ## Herramientas y estándares
 

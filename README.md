@@ -1,6 +1,7 @@
+# Observabilidad con Microservicios Reactivos
+
 ##### Tabla de contenidos
 
-[Observabilidad con Microservicios Reactivos en la JVM](#observabilidad)  
 [JVM en la nube y su complejidad inherente](#complejidad)
 [Flujos Reactivos](#flujos)
 [Programación Reactiva](#reactiva)
@@ -26,10 +27,6 @@
 [Redhat Openshift](#openshift)
 [Kanban y Scrum](#kanban-scrum)
 [Referencias](#Referencias)
-
-
-<a name="observabilidad"/>
-## Observabilidad con Microservicios Reactivos
 
 A travez de la ultima década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación
 funcional, la capacidad exponencial de computo multi hilo y procesamiento en la nube, están teniendo un impacto profundo

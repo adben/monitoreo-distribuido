@@ -7,7 +7,6 @@ el manifiesto reactivo (link) los sistemas reactivos proveen elasticidad(escalan
 resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta disponibilidad(Responden en tiempos
 aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería asíncrona). (Imagen)
 
-<a name="complejidad"/>
 ## JVM en la nube y su complejidad inherente
 
 Java (y la maquina virtual de Java) se ha consolidado como la plataforma preferida en entornos empresariales,
@@ -23,7 +22,6 @@ equipos de trabajo en donde parte de las responsabilidades se pueden transmitir 
 misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirió a los desarrollos de
 frontend cuando los navegadores adquirieron más capacidad de procesamiento.
 
-<a name="flujos"/>
 ### Flujos Reactivos[^3]
 
 Los flujos reactivos son una iniciativa para proporcionar un estándar para el procesamiento de flujo asíncrono con
@@ -32,14 +30,12 @@ y entidades para lograr los flujos de datos asincrónicos con contrapresión sin
 manipulan los flujos, y se utiliza principalmente como una capa de interoperabilidad. Esta iniciativa es apoyada por
 Netflix, Lightbend y Red Hat(Uno de los mayores contribuidores de Vert.x y Kubernetes), entre otros.
 
-<a name="reactiva"/>
 ### Programación Reactiva
 
 La programación reactiva es un modelo de desarrollo orientado a los flujos de datos y la propagación de datos. En la
 programación reactiva, los estímulos son los datos que transitan en el flujo, que se denominan
 corrientes.![](images/media/image2.png){width="5.5in" height="3.585209973753281in"}
 
-<a name="reactiva-p-s"/>
 #### Programación Reactiva y Sistemas Reactivos
 
 Si bien la programación reactiva es un modelo de desarrollo, los sistemas reactivos son un estilo arquitectónico
@@ -76,7 +72,6 @@ del control de la persona que llama(de ahí la importancia de observabilidad y m
 instancias de sus servicios para equilibrar la carga y manejar fallas sin interrumpir la disponibilidad. Por medio del
 uso de Vert.x implementaré estos conceptos.
 
-<a name="reactivos-m"/>
 ### Microservicios Reactivos
 
 Al construir un sistema compuesto de microservicios (y por lo tanto distribuido), cada servicio puede cambiar,
@@ -115,7 +110,6 @@ instancias para administrar la carga. Esto implica un conjunto de restricciones 
 memoria, compartir el estado entre instancias si es necesario, o poder enrutar mensajes a las mismas instancias para
 servicios con estado.
 
-<a name="desarrollo-asinc"/>
 ### Modelo de desarrollo Asíncrono
 
 Los patrones de diseño *RESTful*[^5] son comunes en el mundo de los microservicios. Lo más probable es que se
@@ -128,7 +122,6 @@ mensajería en este campo, especialmente cuando se trata de microservicios expue
 través de MOM. Se puede usar una combinación de solicitud/respuesta en REST y publicación/suscripción de mensajes para
 satisfacer las necesidades de negocio.
 
-<a name="observabilidad-asinc"/>
 #### Observabilidad y Frameworks asíncronos en la JVM
 
 A la hora de aplicar observabilidad con Jaeger cuando trabajamos con librerías y frameworks en la máquina virtual de
@@ -136,7 +129,6 @@ java(jvm) hemos de ser precavidos y algunas veces desaprender y reevaluar "Las m
 Instrumentando el async-http-client hemos de encontrar que si combinamos este poderoso framework con APIs nativas como
 NEO, o usando autocloseable //TODO ejemplo simple combinado con
 
-<a name="quarkus"/>
 ### Quarkus
 
 Quarkus es un fullstack framework de trabajo Java nativo de Kubernetes creado para máquinas virtuales Java (JVM) y
@@ -153,7 +145,6 @@ una extensión es tan fácil como agregar una dependencia, o puede usar las herr
 También proporciona la información correcta a GraalVM (una máquina virtual universal para ejecutar aplicaciones escritas
 en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de su aplicación.
 
-<a name="instrumentacion-quarkus"/>
 #### Instrumentación en Quarkus
 
 Al aplicar instrumentación en Quarkus (usaremos la aplicación instrumentada de los manuales de Quarkus y la extenderemos
@@ -179,7 +170,6 @@ public class FrancophoneService {
 
 //TODO JDBC //TODO Eclipse MicroProfile OpenTracing
 
-<a name="vertx"/>
 ### Vert.x
 
 La esencia de Eclipse Vert.x es procesar eventos asincrónicos, principalmente provenientes de E / S sin bloqueo, y el
@@ -209,7 +199,6 @@ lenguajes con Java. Se están generando enlaces idiomáticos, para que pueda esc
 aún se siente natural. Por ejemplo, los enlaces Scala usan las futuras API de Scala[^14]. Y, por supuesto, puede mezclar
 y combinar diferentes lenguajes compatibles dentro de la misma aplicación Vert.x.
 
-<a name="reactor"/>
 #### Reactor (Patrón de diseño) y el Bucle de eventos
 
 Desde la wikipedia[^15] vemos que: "El patrón de diseño reactor es un patrón de programación concurrente para manejar
@@ -234,7 +223,6 @@ de Vert.x) pueden comunicarse entre sí de una manera de publicación-suscripci�
 eventos y se les da una dirección para escuchar. El bus de eventos permite escalar los vértices, ya que solo necesitamos
 especificar en qué dirección un vértice escucha los eventos y dónde debe publicar esos eventos.
 
-<a name="opentelemetry"/>
 ## Opentracing, OpenTelemetry & Jaeger[^11]
 
 Mientras que OpenTelemetry agrupa una serie de herramientas y APIs enfocadas a generar, colectar y exportar data
@@ -264,7 +252,6 @@ una línea de tiempo de eventos para el seguimiento.
 El SpanContext es la forma serializable de un Span. Permite que la información de Span se transfiera fácilmente a otros
 sistemas a través del cable.
 
-<a name="jaeger"/>
 #### Jaeger
 
 Jaeger fue originalmente desarrollado por Uber para suplir eficientemente monitoreo a su compleja arquitectura de
@@ -289,7 +276,6 @@ La información organizada sobre las transacciones es útil para la depuración 
 herramientas para monitorear transacciones distribuidas, optimizar el rendimiento y la latencia, y realizar análisis de
 causa raíz (RCA), un método de resolución de problemas.
 
-<a name="terminologia-jaeger"/>
 ##### Terminología y componentes de Jaeger:
 
 Jaeger presenta solicitudes de ejecución como *trazas*. Una traza muestra la ruta de datos / ejecución a través de un
@@ -316,7 +302,6 @@ enchufable para el almacenamiento span.
 
 *Jaeger Console* es una interfaz de usuario que le permite visualizar sus datos de rastreo distribuidos.
 
-<a name="plataforma"/>
 ## Plataforma de observabilidad
 
 * Desplegar el contendor de Elasticsearch
@@ -422,10 +407,8 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" |
 
 ```
 
-<a name="herramientas"/>
 ## Herramientas y estándares
 
-<a name="cncf"/>
 ### CNCF
 
 Como indicado en su sitio web[^7], La Cloud Native Computing Foundation (CNCF) aloja componentes críticos de la
@@ -434,7 +417,6 @@ desarrolladores, usuarios finales y proveedores del mundo y ejecuta las conferen
 abierto más grandes. CNCF es parte de la Fundación Linux sin fines de lucro.![](images/media/image4.png){width="5.5in"
 height="4.313889982502187in"}
 
-<a name="containers"/>
 ### Containers (Docker)
 
 Docker es una herramienta diseñada para facilitar la creación, implementación y ejecución de aplicaciones mediante el
@@ -458,7 +440,6 @@ host. Esto proporciona un aumento significativo del rendimiento y reduce el tama
 Y lo más importante, Docker es de código abierto. Esto significa que cualquiera puede contribuir a Docker y extenderlo
 para satisfacer sus propias necesidades si necesitan funciones adicionales que no están disponibles de fábrica.
 
-<a name="elasticsearch"/>
 ### ElasticSearch[^12]
 
 Para centralización del monitoreo y observabilidad usare Elasticsearch, Elasticsearch es un motor de búsqueda y análisis
@@ -470,7 +451,6 @@ para la ingestión, enriquecimiento, almacenamiento, análisis y visualización 
 Stack (después de Elasticsearch, Logstash y Kibana), Elastic Stack ahora incluye una rica colección de agentes de envío
 livianos conocidos como Beats para enviar datos a Elasticsearch.
 
-<a name="metricbeat"/>
 #### MetricBeat*
 
 También parte de ElasticSearch, Metricbeat es un cargador ligero que se puede instalar en los servidores para recopilar
@@ -478,7 +458,6 @@ periódicamente métricas del sistema operativo y de los servicios que se ejecut
 containers. Metricbeat toma las métricas y estadísticas que recopila y las envía a la salida que especifique, como
 Elasticsearch o Logstash.
 
-<a name="kibana"/>
 #### Kibana*
 
 También parte de ElasticSearch, Kibana es una aplicación frontend de código abierto que se encuentra en la parte
@@ -503,7 +482,6 @@ analíticas en tiempo real en grandes volúmenes de datos en apoyo de casos de u
 >
 > Análisis de negocio.
 
-<a name="kubernetes"/>
 ### Kubernetes
 
 Kubernetes (también conocido como k8s o \"kube\") es una plataforma de orquestación de contenedores de código abierto
@@ -538,7 +516,6 @@ Con Kubernetes se puede:
 >
 > Verificar el estado y autorecuperacion las aplicaciones con colocación automática, inicio automático, autorreplicación y escalado automático.
 
-<a name="openshift"/>
 ### Redhat Openshift
 
 De acuerdo con la Wikipedia[^13]; "OpenShift, formalmente llamado Openshift Container Platform (OCP), es un producto de
@@ -547,7 +524,6 @@ aplicaciones Web en los diferentes lenguajes de la plataforma.", pero toda su ex
 en Openshift es la versión empresarial de Kubernetes hecha por RedHat, Inc.![](images/media/image7.png){width="5.5in"
 height="4.097222222222222in"}
 
-<a name="kanban-scrum"/>
 ### Kanban y Scrum
 
 Agile es un enfoque estructurado e iterativo para la gestión de proyectos y el desarrollo de productos. Reconoce la
@@ -570,7 +546,6 @@ si se usa el método Kanban o Scrum, empoderamiento de diferentes roles dentro d
 monitoreo de la(s) aplicación(es) pueden ser claves a la hora de disminuir la incertidumbre y garantizar el exito de los
 equipos en proyectos de software que usen micro servicios JVM en ambientes distribuidos.
 
-<a name="referencias"/>
 ## Referencias
 
 "Microservices: a definition of this new architectural term:" por Martin Fowler, James

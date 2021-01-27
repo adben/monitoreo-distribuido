@@ -2,34 +2,34 @@
 
 [Observabilidad con Microservicios Reactivos en la JVM](#observabilidad)  
 [JVM en la nube y su complejidad inherente](#complejidad)
-[- Flujos Reactivos](#flujos)
-[- Programación Reactiva](#reactiva)
-[- Programación Reactiva y Sistemas Reactivos](#reactiva-p-s)
-[- Microservicios Reactivos](#reactivos-m)
-[- Modelo de desarrollo Asíncrono](#desarrollo-asinc)
+[Flujos Reactivos](#flujos)
+[Programación Reactiva](#reactiva)
+[Programación Reactiva y Sistemas Reactivos](#reactiva-p-s)
+[Microservicios Reactivos](#reactivos-m)
+[Modelo de desarrollo Asíncrono](#desarrollo-asinc)
 [Observabilidad y Frameworks asíncronos en la JVM](#observabilidad-asinc)
 [Quarkus](#quarkus)
-[- Instrumentación en Quarkus](#instrumentacion-quarkus)
+[Instrumentación en Quarkus](#instrumentacion-quarkus)
 [Vert.x](#vertx)
-[- Reactor -Patrón de diseño- y el Bucle de eventos](#reactor)
+[Reactor (Patrón de diseño) y el Bucle de eventos](#reactor)
 [Opentracing, OpenTelemetry & Jaeger](#opentelemetry)
 [Jaeger](#jaeger)
-[- Terminología y componentes de Jaeger](#terminologia-jaeger)
+[Terminología y componentes de Jaeger](#terminologia-jaeger)
 [Plataforma de observabilidad](#plataforma)
 [Herramientas y estándares](#herramientas)
-[- CNCF](#cncf)
-[- Containers -Docker-](#containers)
-[- Elasticsearch](#elasticsearch)
-[- MetricBeat](#metricbeat)
-[- Kibana](#kibana)
-[- Kubernetes](#kubernetes)
-[- Redhat Openshift](#openshift)
-[- Kanban y Scrum](#kanban-scrum)
+[CNCF](#cncf)
+[Containers (Docker)](#containers)
+[Elasticsearch](#elasticsearch)
+[MetricBeat](#metricbeat)
+[Kibana](#kibana)
+[Kubernetes](#kubernetes)
+[Redhat Openshift](#openshift)
+[Kanban y Scrum](#kanban-scrum)
 [Referencias](#Referencias)
 
 
 <a name="observabilidad"/>
-# Observabilidad con Microservicios Reactivos
+## Observabilidad con Microservicios Reactivos
 
 A travez de la ultima década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación
 funcional, la capacidad exponencial de computo multi hilo y procesamiento en la nube, están teniendo un impacto profundo

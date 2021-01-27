@@ -1,35 +1,7 @@
 # Observabilidad con Microservicios Reactivos
 
-##### Tabla de contenidos
-
-[JVM en la nube y su complejidad inherente](#complejidad)
-[Flujos Reactivos](#flujos)
-[Programación Reactiva](#reactiva)
-[Programación Reactiva y Sistemas Reactivos](#reactiva-p-s)
-[Microservicios Reactivos](#reactivos-m)
-[Modelo de desarrollo Asíncrono](#desarrollo-asinc)
-[Observabilidad y Frameworks asíncronos en la JVM](#observabilidad-asinc)
-[Quarkus](#quarkus)
-[Instrumentación en Quarkus](#instrumentacion-quarkus)
-[Vert.x](#vertx)
-[Reactor (Patrón de diseño) y el Bucle de eventos](#reactor)
-[Opentracing, OpenTelemetry & Jaeger](#opentelemetry)
-[Jaeger](#jaeger)
-[Terminología y componentes de Jaeger](#terminologia-jaeger)
-[Plataforma de observabilidad](#plataforma)
-[Herramientas y estándares](#herramientas)
-[CNCF](#cncf)
-[Containers (Docker)](#containers)
-[Elasticsearch](#elasticsearch)
-[MetricBeat](#metricbeat)
-[Kibana](#kibana)
-[Kubernetes](#kubernetes)
-[Redhat Openshift](#openshift)
-[Kanban y Scrum](#kanban-scrum)
-[Referencias](#Referencias)
-
-A travez de la ultima década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación
-funcional, la capacidad exponencial de computo multi hilo y procesamiento en la nube, están teniendo un impacto profundo
+A travez de la última década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación
+funcional, la capacidad exponencial de cómputo multi hilo y procesamiento en la nube, están teniendo un impacto profundo
 en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes empresariales. Como ya esta definido en
 el manifiesto reactivo (link) los sistemas reactivos proveen elasticidad(escalan vertical y horizontalmente),
 resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta disponibilidad(Responden en tiempos

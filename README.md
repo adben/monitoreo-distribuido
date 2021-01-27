@@ -340,13 +340,54 @@ curl -X GET "localhost:9200/_cat/indices?v"
 curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
 ```
 
+* Modificar el mapeo de los campos numéricos en Jaeger
+
+Actualmente los campos indexados en Elasticsearch provenientes desde Jaeger son indexados como keywords, eso esta bien
+cuando se requieren realizar simples dashboards en kibana, pero para efectuar visualizaciones mas potentes y realizar
+calculos en los mismos, hemos de requerir esos campos como numeros, ese mapeo lo podemos effectuar de la siguiente forma
+modificando el mapeo sobre el indice de Jaeger
+
+```JSON
+PUT _template/custom-jaeger-span?include_type_name
+{
+"order": 90,
+"index_patterns": [
+"*jaeger-span-*"
+],
+"mappings": {
+"_doc": {
+"dynamic_templates": [
+{
+"span_long_no_index": {
+"match_mapping_type": "long",
+"mapping":{
+"type": "long",
+"index": false
+}
+}
+},
+{
+"span_double_no_index": {
+"match_mapping_type": "double",
+"mapping": {
+"type": "float",
+"index": false
+}
+}
+}
+]
+}
+}
+}
+```
+
 * Verificar el mapeo de algun campo de tipo entero
 
 ```shell
 curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
 ```
 
-* Iniciar la aplicación de quarkus ya instrumentada (desde la raiz de este proyecto ```shell cd ./quarkus ```
+* Iniciar la aplicación de quarkus ya instrumentada (desde la raiz de este proyecto ``` cd ./quarkus ```
 
 ```shell
 ./mvnw compile quarkus:dev

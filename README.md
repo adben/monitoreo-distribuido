@@ -342,43 +342,47 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
 
 * Modificar el mapeo de los campos numéricos en Jaeger
 
-Actualmente los campos indexados en Elasticsearch provenientes desde Jaeger son indexados como keywords, eso esta bien
-cuando se requieren realizar simples dashboards en kibana, pero para efectuar visualizaciones mas potentes y realizar
-calculos en los mismos, hemos de requerir esos campos como numeros, ese mapeo lo podemos effectuar de la siguiente forma
-modificando el mapeo sobre el indice de Jaeger
+Actualmente los campos indexados en Elasticsearch provenientes desde Jaeger son indexados como keywords, eso está bien
+cuando se requieren realizar simples dashboards en kibana, pero para efectuar visualizaciones más potentes y realizar
+cálculos en los mismos, hemos de requerir esos campos como numéricos, ese mapeo lo podemos efectuar de la siguiente
+forma modificando el mapeo sobre el índice de Jaeger, hemos de ser precavidos con el orden de esta template y el orden
+que se carga el mapeo de Jaeger
 
-```JSON
-PUT _template/custom-jaeger-span?include_type_name
+```Shell
+curl -X PUT "localhost:9200/_template/custom-jaeger-span?include_type_name"
+```
+```json
 {
-"order": 90,
-"index_patterns": [
-"*jaeger-span-*"
-],
-"mappings": {
-"_doc": {
-"dynamic_templates": [
-{
-"span_long_no_index": {
-"match_mapping_type": "long",
-"mapping":{
-"type": "long",
-"index": false
+  "order": 90,
+  "index_patterns": [
+    "*jaeger-span-*"
+  ],
+  "mappings": {
+    "_doc": {
+      "dynamic_templates": [
+        {
+          "span_long_no_index": {
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "long",
+              "index": false
+            }
+          }
+        },
+        {
+          "span_double_no_index": {
+            "match_mapping_type": "double",
+            "mapping": {
+              "type": "float",
+              "index": false
+            }
+          }
+        }
+      ]
+    }
+  }
 }
-}
-},
-{
-"span_double_no_index": {
-"match_mapping_type": "double",
-"mapping": {
-"type": "float",
-"index": false
-}
-}
-}
-]
-}
-}
-}
+
 ```
 
 * Verificar el mapeo de algun campo de tipo entero

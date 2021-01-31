@@ -307,37 +307,19 @@ enchufable para el almacenamiento span.
 * Desplegar el contendor de Elasticsearch
 
 ```shell
-docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.10.2
 ```
 
 * Desplegar el contendor de Kibana
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.9.1
+docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.10.2
 ```
 
 * Desplegar el contendor de Jaeger
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268  -p 16686:16686 jaegertracing/all-in-one:latest
-```
-
-* Verificar la instrumentación con la aplicación ejemplo de Jaeger
-
-```shell
-docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_PORT=6831 -p8080-8083:8080-8083 jaegertracing/example-hotrod:1.19 all
-```
-
-* Verificar los indices en ElasticSearch
-
-```shell
-curl -X GET "localhost:9200/_cat/indices?v"
-```
-
-* Verificar el mapeo en jaeger
-
-```shell
-curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
+docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 jaegertracing/all-in-one:1.21
 ```
 
 * Modificar el mapeo de los campos numéricos en Jaeger
@@ -349,11 +331,9 @@ forma modificando el mapeo sobre el índice de Jaeger, hemos de ser precavidos c
 que se carga el mapeo de Jaeger
 
 ```Shell
-curl -X PUT "localhost:9200/_template/custom-jaeger-span?include_type_name"
-```
-
-```json
-{
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{
   "order": 90,
   "index_patterns": [
     "*jaeger-span-*"
@@ -382,11 +362,38 @@ curl -X PUT "localhost:9200/_template/custom-jaeger-span?include_type_name"
       ]
     }
   }
-}
-
+}' \
+  http://localhost:9200/_template/custom-jaeger-span?include_type_name
 ```
 
-* Verificar el mapeo de algun campo de tipo entero
+obteniendo:
+
+```shell
+{"acknowledged":true}
+```
+
+* Verificar la instrumentación con la aplicación ejemplo de Jaeger
+
+```shell
+docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_PORT=6831 -p9080-9083:8080-8083 jaegertracing/example-hotrod:1.21
+```
+
+Ahora bien, vamos a acceder a la [aplicación ejemplo](http://127.0.0.1:9080/) de jaeger(micro-servicios ya
+instrumentados) y ejecutar algunos request para activar la persistencia de estas trazas en elasticseach
+
+* Verificar los indices en ElasticSearch
+
+```shell
+curl -X GET "localhost:9200/_cat/indices?v"
+```
+
+* Verificar el mapeo en jaeger
+
+```shell
+curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
+```
+
+* Verificar el mapeo de algún campo de tipo entero
 
 ```shell
 curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
@@ -403,9 +410,55 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" |
   usaríamos
 
 ```shell
-./mvnw compile quarkus:dev -Djvm.args="-DJAEGER_SERVICE_NAME=myservice -DJAEGER_SAMPLER_TYPE=const -DJAEGER_SAMPLER_PARAM=1"
+./mvnw compile quarkus:dev -Djvm.args="-DJAEGER_SERVICE_NAME=desdequarkus -DJAEGER_AGENT_PORT=6831 -DJAEGER_SAMPLER_TYPE=const -DJAEGER_SAMPLER_PARAM=1"
+```
+
+* Comprobemos el API
+
+```shell
+curl http://localhost:8080/hello
+```
+
+producirá
+
+```shell
+Listening for transport dt_socket at address: 5005
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+19:55:56 INFO  traceId=, spanId=, sampled= [io.quarkus] (Quarkus Main Thread) opentracing-quickstart 1.0.0-SNAPSHOT on JVM (powered by Quarkus 1.11.1.Final) started in 9.884s. Listening on: http://localhost:8080
+19:55:56 INFO  traceId=, spanId=, sampled= [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+19:55:56 INFO  traceId=, spanId=, sampled= [io.quarkus] (Quarkus Main Thread) Installed features: [cdi, jaeger, rest-client, resteasy, smallrye-opentracing]
+19:56:14 INFO  traceId=e49b74075a5738ea, spanId=e49b74075a5738ea, sampled=true [or.ac.op.TracedResource] (executor-thread-1) hello
+```
+
+* Comprobemos la traza en Jaeger
+
+Accediendo al [UI de Jaeger](http://localhost:16686/) tendremos que seleccionar el nombre del servicio de nuestra
+aplicación de quarkus "desdequarkus"
+
+![](images/media/jaeger1.png)
+
+Al seleccionarlo nos dara los detalles registrados de la traza de ese request
+
+![](images/media/jaeger2.png)
+
+* Comprobemos la persistencia de la traza en Kibana
+
+Vamos a requerir el patron indice (Index pattern) en kibana para que este sepa como tratar el índice por defecto de la
+data que viene de Jaeger "jaeger-span-*"
+
+![](images/media/kibana1.png)
+
+Teniendo esto podremos corroborar la data persistida de las trazas de nuestro servicio "desdequarkus" con un simple
+query, desde la opcion Discovery de kibana:
 
 ```
+process.serviceName : "desdequarkus" 
+```
+
+![](images/media/kibana2.png)
 
 ## Herramientas y estándares
 

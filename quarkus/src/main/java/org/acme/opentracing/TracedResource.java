@@ -19,6 +19,9 @@ public class TracedResource {
     @Inject
     FrancophoneService exampleBean;
 
+    @Inject
+    NapService piBean;
+
     @Context
     private UriInfo uriInfo;
 
@@ -38,5 +41,15 @@ public class TracedResource {
                 .baseUri(uriInfo.getBaseUri())
                 .build(ResourceClient.class);
         return "chain -> " + exampleBean.bonjour() + " -> " + resourceClient.hello();
+    }
+
+    @GET
+    @Path("/nap")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String doNap() {
+        ResourceClient resourceClient = RestClientBuilder.newBuilder()
+                .baseUri(uriInfo.getBaseUri())
+                .build(ResourceClient.class);
+        return "chain -> " + piBean.nap() + " -> " + resourceClient.hello();
     }
 }

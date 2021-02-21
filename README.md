@@ -381,11 +381,24 @@ docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_
 Ahora bien, vamos a acceder a la [aplicación ejemplo](http://127.0.0.1:9080/) de jaeger(micro-servicios ya
 instrumentados) y ejecutar algunos request para activar la persistencia de estas trazas en elasticseach
 
-* Verificar los indices en ElasticSearch
+* Verificar los índices en ElasticSearch
 
 ```shell
 curl -X GET "localhost:9200/_cat/indices?v"
 ```
+
+Obteniendo algo similar a:
+```shell
+health status index                           uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   .apm-custom-link                gmBAV5X6SZ65c7MUwamVWQ   1   0          0            0       208b           208b
+green  open   .kibana_task_manager_1          e7aZ2583RPGOUnLqcHZGzw   1   0          5           21     28.8kb         28.8kb
+green  open   .apm-agent-configuration        mRd5qGOeRYysoe2itpY0xA   1   0          0            0       208b           208b
+yellow open   jaeger-service-2021-02-21       b5WaBzfnTPiyeiH2KYGHmg   5   1         13           24     32.3kb         32.3kb
+green  open   .kibana_1                       VFmSuTL3RY6Xcjwddom5TQ   1   0          8            0      2.1mb          2.1mb
+green  open   .kibana-event-log-7.10.2-000001 csraWriSQBK-8Zm-LGaBCg   1   0          1            0      5.5kb          5.5kb
+yellow open   jaeger-span-2021-02-21          _Ko7zWIWRdGdoEnEm_zDNA   5   1       1795            0      391kb          391kb
+```
+Nuestro interes seran los índices de jaeger con prefijo jaeger-span-*
 
 * Verificar el mapeo en jaeger
 
@@ -397,6 +410,25 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
 
 ```shell
 curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
+```
+Obteniendo:
+```shell
+{
+  "jaeger-span-2021-02-21": {
+    "mappings": {
+      "tag.http@status_code": {
+        "full_name": "tag.http@status_code",
+        "mapping": {
+          "http@status_code": {
+            "type": "long",
+            "index": false
+          }
+        }
+      }
+    }
+  }
+}
+
 ```
 
 * Iniciar la aplicación de quarkus ya instrumentada (desde la raiz de este proyecto ``` cd ./quarkus ```
@@ -419,8 +451,12 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" |
 curl http://localhost:8080/hello
 ```
 
-producirá
+Obteniendo en el shell del client
+```shell
+hello
+```
 
+Obteniendo en la terminal de servicio
 ```shell
 Listening for transport dt_socket at address: 5005
 __  ____  __  _____   ___  __ ____  ______ 

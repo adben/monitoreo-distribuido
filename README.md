@@ -388,6 +388,7 @@ curl -X GET "localhost:9200/_cat/indices?v"
 ```
 
 Obteniendo algo similar a:
+
 ```shell
 health status index                           uuid                   pri rep docs.count docs.deleted store.size pri.store.size
 green  open   .apm-custom-link                gmBAV5X6SZ65c7MUwamVWQ   1   0          0            0       208b           208b
@@ -398,6 +399,7 @@ green  open   .kibana_1                       VFmSuTL3RY6Xcjwddom5TQ   1   0    
 green  open   .kibana-event-log-7.10.2-000001 csraWriSQBK-8Zm-LGaBCg   1   0          1            0      5.5kb          5.5kb
 yellow open   jaeger-span-2021-02-21          _Ko7zWIWRdGdoEnEm_zDNA   5   1       1795            0      391kb          391kb
 ```
+
 Nuestro interes seran los índices de jaeger con prefijo jaeger-span-*
 
 * Verificar el mapeo en jaeger
@@ -411,7 +413,9 @@ curl -X GET "localhost:9200/jaeger-span-*/_mapping" | jq
 ```shell
 curl -X GET "localhost:9200/jaeger-span-*/_mapping/field/tag.http@status_code" | jq
 ```
+
 Obteniendo:
+
 ```shell
 {
   "jaeger-span-2021-02-21": {
@@ -452,11 +456,13 @@ curl http://localhost:8080/hello
 ```
 
 Obteniendo en el shell del client
+
 ```shell
 hello
 ```
 
 Obteniendo en la terminal de servicio
+
 ```shell
 Listening for transport dt_socket at address: 5005
 __  ____  __  _____   ___  __ ____  ______ 
@@ -482,19 +488,30 @@ Al seleccionarlo nos dara los detalles registrados de la traza de ese request
 
 * Comprobemos la persistencia de la traza en Kibana
 
-Vamos a requerir el patron indice (Index pattern) en kibana para que este sepa como tratar el índice por defecto de la
-data que viene de Jaeger "jaeger-span-*"
+Importante! Vamos a requerir el patron indice (Index pattern) en kibana para que este sepa como tratar el índice por
+defecto de la data que viene de Jaeger "jaeger-span-*"
 
 ![](images/media/kibana1.png)
 
+Ahora bien, creemos el pegamento entre kibana y jaeger para navegar entre el detalle de las trazas y la plataforma de
+visualización, con el índice ya creado, vamos a extender el campo ```traceID``` de tal forma que se comporte como URL,
+permitiéndonos ver el detalle de la traza desde kibana mismo, solamente para esto requeriremos esta URL
+template ```http://localhost:16686/trace/{{value}}``` (Obviamente esta se va a tener que ajustar al ambiente en el que
+estemos trabajando)
+
+![](images/media/kibana1a.png)
+
 Teniendo esto podremos corroborar la data persistida de las trazas de nuestro servicio "desdequarkus" con un simple
-query, desde la opcion Discovery de kibana:
+query, desde la opción Discovery de kibana:
 
 ```
 process.serviceName : "desdequarkus" 
 ```
 
 ![](images/media/kibana2.png)
+Ahora nuestras trazas persistidas no solamente seran habilitadas para su búsqueda, sino que también podremos navegar
+fácilmente al detalle de esta traza en el contexto de Jaeger. Luego cuando desarrollemos las visualizaciones veremos la
+utilidad de esta funcionalidad.
 
 ## Herramientas y estándares
 

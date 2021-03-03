@@ -8,10 +8,13 @@ http://javahowto.blogspot.com/2011/08/example-of-expensive-computation.html
 
 import java.math.BigDecimal;
 
+import static java.math.RoundingMode.HALF_EVEN;
+import static java.math.RoundingMode.HALF_UP;
+
 public class Pi implements java.io.Serializable {
     private static final long serialVersionUID = 227L;
     private static final BigDecimal FOUR = BigDecimal.valueOf(4);
-    private static final int roundingMode = BigDecimal.ROUND_HALF_EVEN;
+
    /*
    public static void main(String[] args) {
        BigDecimal result = computePi(Integer.parseInt(args[0]));
@@ -27,10 +30,10 @@ public class Pi implements java.io.Serializable {
      */
     public static BigDecimal computePi(int digits) {
         int scale = digits + 5;
-        BigDecimal arctan1_5 = arctan(5, scale);
-        BigDecimal arctan1_239 = arctan(239, scale);
+        BigDecimal arctan1_5 = arcTan(5, scale);
+        BigDecimal arctan1_239 = arcTan(239, scale);
         BigDecimal pi = arctan1_5.multiply(FOUR).subtract(arctan1_239).multiply(FOUR);
-        return pi.setScale(digits, BigDecimal.ROUND_HALF_UP);
+        return pi.setScale(digits, HALF_UP);
     }
 
     /**
@@ -40,17 +43,17 @@ public class Pi implements java.io.Serializable {
      * tangent:
      * arctan(x) = x - (x^3)/3 + (x^5)/5 - (x^7)/7 + (x^9)/9 ...
      */
-    public static BigDecimal arctan(int inverseX, int scale) {
+    public static BigDecimal arcTan(int inverseX, int scale) {
         BigDecimal result, numer, term;
         BigDecimal invX = BigDecimal.valueOf(inverseX);
-        BigDecimal invX2 = BigDecimal.valueOf(inverseX * inverseX);
-        numer = BigDecimal.ONE.divide(invX, scale, roundingMode);
+        BigDecimal invX2 = BigDecimal.valueOf((long) inverseX * inverseX);
+        numer = BigDecimal.ONE.divide(invX, scale, HALF_EVEN);
         result = numer;
         int i = 1;
         do {
-            numer = numer.divide(invX2, scale, roundingMode);
+            numer = numer.divide(invX2, scale, HALF_EVEN);
             int denom = 2 * i + 1;
-            term = numer.divide(BigDecimal.valueOf(denom), scale, roundingMode);
+            term = numer.divide(BigDecimal.valueOf(denom), scale, HALF_EVEN);
             if ((i % 2) != 0) {
                 result = result.subtract(term);
             } else {

@@ -168,7 +168,35 @@ public class FrancophoneService {
 
 ```
 
-//TODO JDBC //TODO Eclipse MicroProfile OpenTracing
+#### Quarkus y eclipse microProfile openTracing
+
+Ahora bien, a la hora de necesitar instrumentar la data proveniente de la logica de negocios de la aplicación, vamos a
+tener que hacer uso del tracer configurado como esta descrito en la wiki
+de [Eclipse MicroProfile OpenTracing](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc)
+el cual podemos acceder usando inyección CDI ```io.opentracing.Tracer```.Con el podemos fácilmente generar tags o hacer
+uso de los logs o usar el baggage de nuestro Span:
+
+```java
+
+@Traced
+@ApplicationScoped
+public class NapService {
+
+    @Inject
+    io.opentracing.Tracer configuredTracer;
+
+    public String nap() {
+        configuredTracer.activeSpan().log("Received request on Thread: " + Thread.currentThread().getName());
+        final BigDecimal bigDecimal = Pi.computePi(20000);
+        configuredTracer.activeSpan().setTag("out.computed.pi", bigDecimal);
+        configuredTracer.activeSpan().log("Doing some load");
+        configuredTracer.activeSpan().log("Back from the nap: " + Thread.currentThread().getName());
+        return "Nap from " + new Date().toString();
+    }
+
+}
+
+```
 
 ### Vert.x
 

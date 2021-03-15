@@ -173,7 +173,7 @@ public class FrancophoneService {
 Ahora bien, a la hora de necesitar instrumentar la data proveniente de la logica de negocios de la aplicación, vamos a
 tener que hacer uso del tracer configurado como esta descrito en la wiki
 de [Eclipse MicroProfile OpenTracing](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc)
-el cual podemos acceder usando inyección CDI ```io.opentracing.Tracer```.Con el podemos fácilmente generar tags o hacer
+el cual podemos acceder usando inyección CDI ```io.opentracing.Tracer```.Con él podemos fácilmente generar tags o hacer
 uso de los logs o usar el baggage de nuestro Span:
 
 ```java
@@ -198,6 +198,8 @@ public class NapService {
 
 ```
 
+https://github.com/acroquest/micrometer-kibana-dashboard/
+
 ### Vert.x
 
 La esencia de Eclipse Vert.x es procesar eventos asincrónicos, principalmente provenientes de E / S sin bloqueo, y el
@@ -221,7 +223,7 @@ vertx-redis, vertx-mongo, etc.),
 
 conectando con Apache Cassandra, E / S sin bloqueo para comunicarse entre procesos del sistema, etc.
 
-Vert.x es políglota ya que admite la mayoría de los lenguajes JVM populares y relacionados: JavaScript, Ruby, Kotlin,
+Vert.x es políglota, ya que admite la mayoría de los lenguajes JVM populares y relacionados: JavaScript, Ruby, Kotlin,
 Scala, Groovy y más. Curiosamente, el soporte de estos lenguajes no es solo a través de la interoperabilidad de estos
 lenguajes con Java. Se están generando enlaces idiomáticos, para que pueda escribir código Vert.x en estos idiomas que
 aún se siente natural. Por ejemplo, los enlaces Scala usan las futuras API de Scala[^14]. Y, por supuesto, puede mezclar
@@ -574,6 +576,16 @@ host. Esto proporciona un aumento significativo del rendimiento y reduce el tama
 Y lo más importante, Docker es de código abierto. Esto significa que cualquiera puede contribuir a Docker y extenderlo
 para satisfacer sus propias necesidades si necesitan funciones adicionales que no están disponibles de fábrica.
 
+### Hypertrace
+
+Hypertrace fue desarrollado originalmente por Traceable como una plataforma de rastreo distribuida altamente escalable.
+La plataforma de seguridad de aplicaciones nativas de la nube de Traceable se basa en muchos de los mismos componentes
+que se utilizan en Hypertrace. Hypertrace es una plataforma de Observabilidad basada en rastreo distribuido nativa de la
+nube que brinda visibilidad de sus sistemas distribuidos de desarrollo y producción. Básicamente, provee las
+herramientas de visualization y persistencia de datos de la observabilidad que proponemos con esta plataforma de
+observabilidad, pero considero que al momento de escribir este ensayo, no posee la flexibilidad necesaria para adecuar
+las visualizaciones basadas en las soluciones customizadas del negocio especificas de las aplicaciones.
+
 ### ElasticSearch[^12]
 
 Para centralización del monitoreo y observabilidad usare Elasticsearch, Elasticsearch es un motor de búsqueda y análisis
@@ -764,6 +776,8 @@ OpenShift" [https://github.com/minishift/minishift]{.ul}
 "Infoq: Observability" [https://www.infoq.com/observability/]{.ul}
 
 "Kanban vs. Scrum" https://www.atlassian.com/agile/kanban/kanban-vs-scrum
+
+"Hypertrace" https://www.hypertrace.org/
 
 [^1]: Martin Fowler, James Lewis. Microservices: a definition of this new architectural
 term: https://www.martinfowler.com/articles/microservices.html.

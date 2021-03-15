@@ -170,6 +170,9 @@ public class FrancophoneService {
 
 #### Quarkus y eclipse microProfile openTracing
 
+Básicamente microProfile es una especificación de código abierto que aporta una serie de características centradas en
+microservicios al ecosistema de Java EE.
+![](images/media/microprofile.png)
 Ahora bien, a la hora de necesitar instrumentar la data proveniente de la logica de negocios de la aplicación, vamos a
 tener que hacer uso del tracer configurado como esta descrito en la wiki
 de [Eclipse MicroProfile OpenTracing](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc)

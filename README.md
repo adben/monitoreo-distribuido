@@ -695,6 +695,26 @@ si se usa el método Kanban o Scrum, empoderamiento de diferentes roles dentro d
 monitoreo de la(s) aplicación(es) pueden ser claves a la hora de disminuir la incertidumbre y garantizar el exito de los
 equipos en proyectos de software que usen micro servicios JVM en ambientes distribuidos.
 
+## Conclusiones
+
+* La razón por la cual seleccione Quarkus en lugar de SpringBoot, es su arquitectura hibrida, su soporte nativo a
+  estándares y el hecho de que esta basado en vert.x provehiendo y extendiendo todas las ventajas que este ofrece.
+
+| Java Framework/Libreria | Arquitectura/APIs               | Herramientas y Servidor                                                                 | website                                |
+|----------------|---------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------|
+| DropWizard     | JAX-RS API                      | Maven, Jetty(Fatjar)                                                                    | https://www.dropwizard.io/en/latest/   |
+| Spring Boot    | Spring API @RestController      | Maven o Gradle, Standalone(tomcat, jetty) y Nativo de la nube(dependiendo de la version) | https://spring.io/projects/spring-boot |
+| WildFly Swarm  | JavaEE 7 APIS                   | Maven o Gradle, Wildfly(undertow)                                                       | https://wildfly-swarm.io/              |
+| Vert.x         | Reactiva                        | Maven, CLI, HTTP, HTTP2, TCP, UDP, Websockets (out of the box)                          | https://vertx.io/                      |
+| Quarkus        | Hibrida (reactiva e imperativa) | GraalVM, Maven o Gradle, Nativo de la nube(basado en Vert.x)                            | https://quarkus.io/                    |
+
+* MicroProfile en Quarkus brinda la capacidad de observar el estado de micro servicios nativos de la nube completamente
+  utilizando estándares libres.
+
+* Elasticsearch y Kibana son a mi discreción las herramientas libres(ver nuevo soporte de AWS) para visualizar de forma
+  flexible y unificada la data provista para la observabilidad. Por encima de [hypertrace](https://www.hypertrace.org)
+  y [Grafana Tempo](https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/?src=tw&mdm=social)
+
 ## Referencias
 
 "Microservices: a definition of this new architectural term:" por Martin Fowler, James

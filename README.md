@@ -1,39 +1,38 @@
 # Observabilidad con Microservicios Reactivos
 
-A travez de la última década(link) hemos visto cómo trends importantes como lo son Programación Reactiva, programación
-funcional, la capacidad exponencial de cómputo multi hilo y procesamiento en la nube, están teniendo un impacto profundo
+En la última década(link) hemos visto cómo tendencias importantes entre las cuales encontramos a la Programación Reactiva, la programación
+funcional, la capacidad exponencial de cómputo multi hilo y el procesamiento en la nube; están teniendo un impacto profundo
 en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes empresariales. Como ya esta definido en
-el manifiesto reactivo (link) los sistemas reactivos proveen elasticidad(escalan vertical y horizontalmente),
+el manifiesto reactivo (link) estos sistemas proveen elasticidad(escalan vertical y horizontalmente),
 resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta disponibilidad(Responden en tiempos
 aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería asíncrona). (Imagen)
 
 ## JVM en la nube y su complejidad inherente
 
-Java (y la maquina virtual de Java) se ha consolidado como la plataforma preferida en entornos empresariales,
+Java (y la maquina virtual de Java) se ha consolidado como una de las plataformas preferidas en entornos empresariales,
 lamentablemente como lo hemos visto con el proyecto loom() la evolución del lenguaje no ha priorizado las API enfocadas
 a programación reactiva, es ahí donde Vert.x y Quarkus brillan, proveyendo no solo API’s que no bloquean el hilo en el
-que se está ejecutando, si que además brindan plugins que facilitan la programación reactiva y funcional. El precio e
+que se está ejecutando, sino que además brindan extensiones que facilitan la programación reactiva y funcional. El precio e
 impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kanban) es alto debido a la complejidad
-asociada al desarrollo de estos sistemas, planeamiento de funcionalidades a brindar, y al estándar actual de despliegue
+asociada al desarrollo de estos sistemas, al planeamiento de funcionalidades a brindar, y al estándar actual de despliegue
 de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por un lado
-monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a los
-desarrolladores con más señoría … Esto como lo veo yo, no es más que otra oportunidad para actualizar dinámicas de
-equipos de trabajo en donde parte de las responsabilidades se pueden transmitir por medio de tecnologías simples, de la
-misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirió a los desarrollos de
+monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a 
+desarrolladores con mayor experiencia, generando así otra oportunidad para actualizar dinámicas de
+equipos de trabajo en donde parte de las responsabilidades se puedan transmitir por medio de tecnologías simples, de la
+misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirieron a los desarrollos de
 frontend cuando los navegadores adquirieron más capacidad de procesamiento.
 
 ### Flujos Reactivos[^3]
 
 Los flujos reactivos son una iniciativa para proporcionar un estándar para el procesamiento de flujo asíncrono con
-contrapresión(*back-pressure*). Proporciona un conjunto mínimo de interfaces y protocolos que describen las operaciones
-y entidades para lograr los flujos de datos asincrónicos con contrapresión sin bloqueo. No define los operadores que
-manipulan los flujos, y se utiliza principalmente como una capa de interoperabilidad. Esta iniciativa es apoyada por
+contrapresión(*back-pressure*). Proporcionando un conjunto mínimo de interfaces y protocolos que describen las operaciones
+y entidades para lograr los flujos de datos asincrónicos con contrapresión sin bloqueo. Estos flujos no definen los operadores que
+los manipulan, y se utilizan principalmente como una capa de interoperabilidad. Esta iniciativa es apoyada por
 Netflix, Lightbend y Red Hat(Uno de los mayores contribuidores de Vert.x y Kubernetes), entre otros.
 
 ### Programación Reactiva
 
-La programación reactiva es un modelo de desarrollo orientado a los flujos de datos y la propagación de datos. En la
-programación reactiva, los estímulos son los datos que transitan en el flujo, que se denominan
+La programación reactiva es un modelo de desarrollo orientado a los flujos y la propagación de los datos. En esta programación, los estímulos son los datos que transitan en el flujo, que se denominan
 corrientes.![](images/media/image2.png){width="5.5in" height="3.585209973753281in"}
 
 #### Programación Reactiva y Sistemas Reactivos
@@ -433,7 +432,7 @@ green  open   .kibana-event-log-7.10.2-000001 csraWriSQBK-8Zm-LGaBCg   1   0    
 yellow open   jaeger-span-2021-02-21          _Ko7zWIWRdGdoEnEm_zDNA   5   1       1795            0      391kb          391kb
 ```
 
-Nuestro interes seran los índices de jaeger con prefijo jaeger-span-*
+EL interes serán los índices de jaeger con prefijo jaeger-span-*
 
 * Verificar el mapeo en jaeger
 

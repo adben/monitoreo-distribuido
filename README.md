@@ -1,12 +1,25 @@
 # Observabilidad con Microservicios Reactivos
 
-En la última década(link) hemos visto cómo tendencias importantes entre las cuales encontramos a la Programación
-Reactiva, la programación funcional, la capacidad exponencial de cómputo multi hilo y el procesamiento en la nube; están
-teniendo un impacto profundo en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes
-empresariales. Como ya esta definido en el manifiesto reactivo (link) estos sistemas proveen elasticidad(escalan
-vertical y horizontalmente), resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta
-disponibilidad(Responden en tiempos aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería
-asíncrona). (Imagen)
+En la última década hemos visto cómo tendencias importantes entre las cuales encontramos a la Programación Reactiva, la
+programación funcional, la capacidad exponencial de cómputo multi hilo y el procesamiento en la nube; están teniendo un
+impacto profundo en la manera como se desarrollan y despliegan nuevas aplicaciones en ambientes empresariales. Ya
+definido en el [manifiesto reactivo](https://www.reactivemanifesto.org/es) estos sistemas proveen:
+
+* Elasticidad (Escalan vertical y horizontalmente)
+* Resiliencia (Diseñados para manejar errores sin comprometer la arquitectura)
+* Alta disponibilidad (Responden en tiempos aceptables)
+* Son basados en diseños enfocados a mensajes (interactúan con mensajería asíncrona)
+
+El uso de microservicios reactivos no es una mera tendencia, en ambientes distribuidos ofrecen la manera más rápida,
+eficiente, robusta y escalable para producir valor agregado a las organizaciones que hacen uso de la nube como su
+plataforma de despliegue. El problema de este enfoque, es que le quita visibilidad del comportamiento de estos sistemas
+o se hace mas difícil el monitoreo de estos. Vert.x y/o Quarkus ayudan al desarrollo de microservicios reactivos, pero
+¿qué pasa con la observabilidad y/o monitoreo de la aplicación? Es importante que en despliegues distribuidos que
+podamos observar las solicitudes que maneja la aplicación. Consideremos una aplicación de comercio electrónico, por
+ejemplo; Se puede pasar una única solicitud de pago a decenas o cientos de servicios antes de que la aplicación termine
+de manejar ese proceso; ya sea en entornos de desarrollo o producción, los equipos de desarrolladores, de negocios y de
+soporte necesitan herramientas para comprender y depurar los problemas que puedan surgir dentro de sus servicios o para
+la toma de decisiones en futuros desarrollos.
 
 # Objetivo General
 
@@ -32,19 +45,20 @@ observabilidad en sus prácticas, liberando los entornos para otras tareas sobre
 ## JVM en la nube y su complejidad inherente
 
 Java (y la maquina virtual de Java) se ha consolidado como una de las plataformas preferidas en entornos empresariales,
-lamentablemente como lo hemos visto con el proyecto loom() la evolución del lenguaje no ha priorizado las API enfocadas
-a programación reactiva, es ahí donde Vert.x y Quarkus brillan, proveyendo no solo API’s que no bloquean el hilo en el
-que se está ejecutando, sino que además brindan extensiones que facilitan la programación reactiva y funcional. El
-precio e impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kanban) es alto debido a la
-complejidad asociada al desarrollo de estos sistemas, al planeamiento de funcionalidades a brindar, y al estándar actual
-de despliegue de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por
-un lado monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a
-desarrolladores con mayor experiencia, generando así otra oportunidad para actualizar dinámicas de equipos de trabajo en
-donde parte de las responsabilidades se puedan transmitir por medio de tecnologías simples, de la misma forma en la que
-arquitecturas que eran exclusivas para trabajo en el backend se transfirieron a los desarrollos de frontend cuando los
-navegadores adquirieron más capacidad de procesamiento.
+lamentablemente como lo hemos visto con el [proyecto loom](https://www.javaadvent.com/2019/12/project-loom.html) la
+evolución del lenguaje no ha priorizado las API enfocadas a programación reactiva, es ahí donde Vert.x y Quarkus
+brillan, proveyendo no solo API’s que no bloquean el hilo en el que se está ejecutando, sino que además brindan
+extensiones que facilitan la programación reactiva y funcional. El precio e impacto que tiene esto en los equipos de
+desarrollo ágiles (como Scrum o Kanban) es alto debido a la complejidad asociada al desarrollo de estos sistemas, al
+planeamiento de funcionalidades a brindar, y al estándar actual de despliegue de estas aplicaciones desde los ambientes
+de trabajo DTAP(Desarrollo, Test, Acceptance, Producción) hasta la nube por medio de contenedores y Kubernetes. Ahora
+bien si por un lado monitoreo y observabilidad solucionan gran parte de estos obstáculos, crean nuevas tareas usualmente
+relegadas a desarrolladores con mayor experiencia, generando así otra oportunidad para actualizar dinámicas de equipos
+de trabajo en donde parte de las responsabilidades se puedan transmitir por medio de tecnologías simples, de la misma
+forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirieron a los desarrollos de
+frontend cuando los navegadores adquirieron más capacidad de procesamiento.
 
-### Flujos Reactivos[^3]
+### Flujos Reactivos
 
 Los flujos reactivos son una iniciativa para proporcionar un estándar para el procesamiento de flujo asíncrono con
 contrapresión(*back-pressure*). Proporcionando un conjunto mínimo de interfaces y protocolos que describen las

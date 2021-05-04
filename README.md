@@ -1,38 +1,62 @@
 # Observabilidad con Microservicios Reactivos
 
-En la última década(link) hemos visto cómo tendencias importantes entre las cuales encontramos a la Programación Reactiva, la programación
-funcional, la capacidad exponencial de cómputo multi hilo y el procesamiento en la nube; están teniendo un impacto profundo
-en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes empresariales. Como ya esta definido en
-el manifiesto reactivo (link) estos sistemas proveen elasticidad(escalan vertical y horizontalmente),
-resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta disponibilidad(Responden en tiempos
-aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería asíncrona). (Imagen)
+En la última década(link) hemos visto cómo tendencias importantes entre las cuales encontramos a la Programación
+Reactiva, la programación funcional, la capacidad exponencial de cómputo multi hilo y el procesamiento en la nube; están
+teniendo un impacto profundo en la manera cómo se desarrollan y despliegan nuevas aplicaciones en ambientes
+empresariales. Como ya esta definido en el manifiesto reactivo (link) estos sistemas proveen elasticidad(escalan
+vertical y horizontalmente), resiliencia(diseñados para manejar errores sin comprometer la arquitectura), alta
+disponibilidad(Responden en tiempos aceptables) y son basados en diseños enfocados a mensajes(interactúan con mensajería
+asíncrona). (Imagen)
+
+# Objetivo General
+
+Identificar el impacto del monitoreo y la observabilidad al trabajar con microservicios reactivos en la máquina virtual
+de Java sobre otros roles diferentes al de desarrollador, poniendo como premisa que los desarrolladores adopten
+observabilidad en sus prácticas, liberando los entornos para otras tareas sobre la data recolectada.
+
+# Objetivos  Específicos
+
+* Proveer una alternativa de observabilidad y monitoreo sobre sistemas distribuidos utilizando herramientas de software
+  libre.
+
+* Identificar las mejores prácticas a la hora de monitorear aplicaciones reactivas en sistemas distribuidos escalables.
+
+* Explorar los diferentes frameworks reactivos disponibles dentro del software libre que hagan uso de la máquina virtual
+  de Java.
+
+* Presentar como algunos frameworks libres que usan programación asincrónica en la máquina virtual de Java, son
+  herramientas accesibles y eficientes para escribir de forma asíncrona aplicaciones escalables enfocadas a la nube.
+
+* Construir un prototipo reactivo con su respectivo cliente de carga usando alguno de estos frameworks
 
 ## JVM en la nube y su complejidad inherente
 
 Java (y la maquina virtual de Java) se ha consolidado como una de las plataformas preferidas en entornos empresariales,
 lamentablemente como lo hemos visto con el proyecto loom() la evolución del lenguaje no ha priorizado las API enfocadas
 a programación reactiva, es ahí donde Vert.x y Quarkus brillan, proveyendo no solo API’s que no bloquean el hilo en el
-que se está ejecutando, sino que además brindan extensiones que facilitan la programación reactiva y funcional. El precio e
-impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kanban) es alto debido a la complejidad
-asociada al desarrollo de estos sistemas, al planeamiento de funcionalidades a brindar, y al estándar actual de despliegue
-de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por un lado
-monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a 
-desarrolladores con mayor experiencia, generando así otra oportunidad para actualizar dinámicas de
-equipos de trabajo en donde parte de las responsabilidades se puedan transmitir por medio de tecnologías simples, de la
-misma forma en la que arquitecturas que eran exclusivas para trabajo en el backend se transfirieron a los desarrollos de
-frontend cuando los navegadores adquirieron más capacidad de procesamiento.
+que se está ejecutando, sino que además brindan extensiones que facilitan la programación reactiva y funcional. El
+precio e impacto que tiene esto en los equipos de desarrollo ágiles (como Scrum o Kanban) es alto debido a la
+complejidad asociada al desarrollo de estos sistemas, al planeamiento de funcionalidades a brindar, y al estándar actual
+de despliegue de estas aplicaciones desde DTAP hasta la nube por medio de contenedores y Kubernetes. Ahora bien si por
+un lado monitoreo y observabilidad solucionan gran parte de estos challenges, crean nuevas tareas usualmente relegadas a
+desarrolladores con mayor experiencia, generando así otra oportunidad para actualizar dinámicas de equipos de trabajo en
+donde parte de las responsabilidades se puedan transmitir por medio de tecnologías simples, de la misma forma en la que
+arquitecturas que eran exclusivas para trabajo en el backend se transfirieron a los desarrollos de frontend cuando los
+navegadores adquirieron más capacidad de procesamiento.
 
 ### Flujos Reactivos[^3]
 
 Los flujos reactivos son una iniciativa para proporcionar un estándar para el procesamiento de flujo asíncrono con
-contrapresión(*back-pressure*). Proporcionando un conjunto mínimo de interfaces y protocolos que describen las operaciones
-y entidades para lograr los flujos de datos asincrónicos con contrapresión sin bloqueo. Estos flujos no definen los operadores que
-los manipulan, y se utilizan principalmente como una capa de interoperabilidad. Esta iniciativa es apoyada por
-Netflix, Lightbend y Red Hat(Uno de los mayores contribuidores de Vert.x y Kubernetes), entre otros.
+contrapresión(*back-pressure*). Proporcionando un conjunto mínimo de interfaces y protocolos que describen las
+operaciones y entidades para lograr los flujos de datos asincrónicos con contrapresión sin bloqueo. Estos flujos no
+definen los operadores que los manipulan, y se utilizan principalmente como una capa de interoperabilidad. Esta
+iniciativa es apoyada por Netflix, Lightbend y Red Hat(Uno de los mayores contribuidores de Vert.x y Kubernetes), entre
+otros.
 
 ### Programación Reactiva
 
-La programación reactiva es un modelo de desarrollo orientado a los flujos y la propagación de los datos. En esta programación, los estímulos son los datos que transitan en el flujo, que se denominan
+La programación reactiva es un modelo de desarrollo orientado a los flujos y la propagación de los datos. En esta
+programación, los estímulos son los datos que transitan en el flujo, que se denominan
 corrientes.![](images/media/image2.png){width="5.5in" height="3.585209973753281in"}
 
 #### Programación Reactiva y Sistemas Reactivos
@@ -143,6 +167,14 @@ una extensión es tan fácil como agregar una dependencia, o puede usar las herr
 
 También proporciona la información correcta a GraalVM (una máquina virtual universal para ejecutar aplicaciones escritas
 en varios lenguajes, incluidos Java y JavaScript) para la compilación nativa de su aplicación.
+
+| Java Framework/Libreria | Arquitectura/APIs               | Herramientas y Servidor                                                                 | website                                |
+|----------------|---------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------|
+| DropWizard     | JAX-RS API                      | Maven, Jetty(Fatjar)                                                                    | https://www.dropwizard.io/en/latest/   |
+| Spring Boot    | Spring API @RestController      | Maven o Gradle, Standalone(tomcat, jetty) y Nativo de la nube(dependiendo de la version) | https://spring.io/projects/spring-boot |
+| WildFly Swarm  | JavaEE 7 APIS                   | Maven o Gradle, Wildfly(undertow)                                                       | https://wildfly-swarm.io/              |
+| Vert.x         | Reactiva                        | Maven, CLI, HTTP, HTTP2, TCP, UDP, Websockets (out of the box)                          | https://vertx.io/                      |
+| Quarkus        | Hibrida (reactiva e imperativa) | GraalVM, Maven o Gradle, Nativo de la nube(basado en Vert.x)                            | https://quarkus.io/                    |
 
 #### Instrumentación en Quarkus
 
@@ -597,7 +629,11 @@ N.V. (ahora conocido como Elastic). Conocido por sus API REST simples, naturalez
 escalabilidad, Elasticsearch es el componente central de Elastic Stack, un conjunto de herramientas de código abierto
 para la ingestión, enriquecimiento, almacenamiento, análisis y visualización de datos. Conocido comúnmente como ELK
 Stack (después de Elasticsearch, Logstash y Kibana), Elastic Stack ahora incluye una rica colección de agentes de envío
-livianos conocidos como Beats para enviar datos a Elasticsearch.
+livianos conocidos como Beats para enviar datos a Elasticsearch. Elasticsearch en combinación con kibana ofrecen
+diferentes alternativas para visualizar de forma flexible y unificada la data provista para la observabilidad. Además de
+estar en un grado mas alto de madures que [hypertrace](https://www.hypertrace.org)
+y una arquitectura escalable con mejor persistencia de datos
+que [Grafana Tempo.](https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/?src=tw&mdm=social)
 
 #### MetricBeat*
 
@@ -696,23 +732,8 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
 
 ## Conclusiones
 
-* La razón por la cual seleccione Quarkus en lugar de SpringBoot, es su arquitectura hibrida, su soporte nativo a
-  estándares y el hecho de que esta basado en vert.x provehiendo y extendiendo todas las ventajas que este ofrece.
-
-| Java Framework/Libreria | Arquitectura/APIs               | Herramientas y Servidor                                                                 | website                                |
-|----------------|---------------------------------|-----------------------------------------------------------------------------------------|----------------------------------------|
-| DropWizard     | JAX-RS API                      | Maven, Jetty(Fatjar)                                                                    | https://www.dropwizard.io/en/latest/   |
-| Spring Boot    | Spring API @RestController      | Maven o Gradle, Standalone(tomcat, jetty) y Nativo de la nube(dependiendo de la version) | https://spring.io/projects/spring-boot |
-| WildFly Swarm  | JavaEE 7 APIS                   | Maven o Gradle, Wildfly(undertow)                                                       | https://wildfly-swarm.io/              |
-| Vert.x         | Reactiva                        | Maven, CLI, HTTP, HTTP2, TCP, UDP, Websockets (out of the box)                          | https://vertx.io/                      |
-| Quarkus        | Hibrida (reactiva e imperativa) | GraalVM, Maven o Gradle, Nativo de la nube(basado en Vert.x)                            | https://quarkus.io/                    |
-
 * MicroProfile en Quarkus brinda la capacidad de observar el estado de micro servicios nativos de la nube completamente
   utilizando estándares libres.
-
-* Elasticsearch y Kibana son a mi discreción las herramientas libres(ver nuevo soporte de AWS) para visualizar de forma
-  flexible y unificada la data provista para la observabilidad. Por encima de [hypertrace](https://www.hypertrace.org)
-  y [Grafana Tempo](https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/?src=tw&mdm=social)
 
 ## Referencias
 

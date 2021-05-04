@@ -71,7 +71,7 @@ otros.
 
 La programación reactiva es un modelo de desarrollo orientado a los flujos y la propagación de los datos. En esta
 programación, los estímulos son los datos que transitan en el flujo, que se denominan
-corrientes.![](images/media/image2.png){width="5.5in" height="3.585209973753281in"}
+corrientes.![](images/media/image2.png)
 
 #### Programación Reactiva y Sistemas Reactivos
 
@@ -152,7 +152,7 @@ servicios con estado.
 Los patrones de diseño *RESTful*[^5] son comunes en el mundo de los microservicios. Lo más probable es que se
 implementen de forma síncrona y por lo tanto, de bloqueo. Incluso si esto se puede cambiar en Java EE, y las
 implementaciones admiten llamadas asincrónicas, aún podrían considerarse como ciudadano de segunda clase en una
-implementación típica.![](images/media/image3.png){width="5.5in" height="3.7291666666666665in"}
+implementación típica.![](images/media/image3.png)
 
 El *middleware* orientado a mensajes (MOM[^6]) es una solución más razonable para los problemas de integración y
 mensajería en este campo, especialmente cuando se trata de microservicios expuestos por sistemas host y conectados a
@@ -215,8 +215,9 @@ public class FrancophoneService {
 
 #### Quarkus y eclipse microProfile openTracing
 
-Básicamente microProfile es una especificación de código abierto que aporta una serie de características centradas en
-microservicios al ecosistema de Java EE.
+MicroProfile en Quarkus brinda la capacidad de observar el estado de micro servicios nativos de la nube completamente
+utilizando estándares libres. Básicamente microProfile es una especificación de código abierto que aporta una serie de
+características centradas en microservicios al ecosistema de Java EE.
 ![](images/media/microprofile.png)
 Ahora bien, a la hora de necesitar instrumentar la data proveniente de la logica de negocios de la aplicación, vamos a
 tener que hacer uso del tracer configurado como esta descrito en la wiki
@@ -284,14 +285,13 @@ los pedidos de servicio entregados de forma concurrente a un manejador de servic
 manejador de servicio demultiplexa los pedidos entrantes y los entrega de forma sincrónica a los manejadores de pedidos
 asociados."
 
-![](images/media/image8.png){width="5.5in" height="2.6139807524059493in"}
+![](images/media/image8.png)
 
 Ahora bien, Eclipse Vert.x implementa un patrón multi-reactor soportado por eventloops. En el Reactor, existe un flujo
 de eventos delegados a los manejadores por un hilo llamado eventloop(bucle de eventos). Debido a que el bucle de eventos
 observa el flujo de eventos y llama a los controladores(handlers) para manejar el evento, es importante que NUNCA
 bloquee el bucle de eventos. Si los controladores no están disponibles para el bucle de eventos, entonces el bucle de
 eventos tiene que esperar; por lo tanto, efectivamente llamamos al evento loop bloqueado.![](images/media/image9.png)
-{width="5.5in" height="3.0584405074365706in"}
 
 Eclipse Vert.x implementa un patrón multi-reactor donde, por defecto, cada núcleo de CPU tiene dos bucles de eventos.
 Esto le da a las aplicaciones que usan Vert.x la capacidad de respuesta necesaria cuando aumenta el número de eventos.
@@ -311,7 +311,7 @@ una forma estandarizada de instrumentar el rastreo distribuido, parte de los cor
 
 Entre sus principales componentes de OpenTracing tenemos a:
 
-*Tracer - Trazador*![](images/media/image6.png){width="5.5in" height="4.147737314085739in"}
+*Tracer - Trazador*![](images/media/image6.png)
 
 El rastreador(*tracer*) es el punto de entrada a la API de rastreo. Nos da la capacidad de crear tramos. También nos
 permite extraer información de rastreo de fuentes externas e inyectar información a destinos externos.
@@ -345,7 +345,7 @@ los desarrolladores e ingenieros aislar un problema cuando algo sale mal o una s
 Necesitamos una manera de hacer un seguimiento de todas las conexiones.
 
 Ahí es donde entra el rastreo distribuido. A menudo se ejecuta como parte de una malla de servicios, que es una forma de
-administrar y observar microservicios.![](images/media/image5.png){width="5.5in" height="3.7677952755905513in"}
+administrar y observar microservicios.![](images/media/image5.png)
 
 Jaeger utiliza el rastreo distribuido para seguir la ruta de una solicitud a través de diferentes microservicios. En
 lugar de adivinar, podemos ver una representación visual de los flujos de llamadas.
@@ -598,8 +598,7 @@ utilidad de esta funcionalidad.
 Como indicado en su sitio web[^7], La Cloud Native Computing Foundation (CNCF) aloja componentes críticos de la
 infraestructura tecnológica global cuando se trabaja con tecnologías alojadas en la nube. CNCF reúne a los principales
 desarrolladores, usuarios finales y proveedores del mundo y ejecuta las conferencias de desarrolladores de código
-abierto más grandes. CNCF es parte de la Fundación Linux sin fines de lucro.![](images/media/image4.png){width="5.5in"
-height="4.313889982502187in"}
+abierto más grandes. CNCF es parte de la Fundación Linux sin fines de lucro.![](images/media/image4.png)
 
 ### Containers (Docker)
 
@@ -719,8 +718,7 @@ Con Kubernetes se puede:
 De acuerdo con la Wikipedia[^13]; "OpenShift, formalmente llamado Openshift Container Platform (OCP), es un producto de
 computación en la nube de plataforma como servicio de Red Hat. Los desarrolladores pueden usar Git para desplegar sus
 aplicaciones Web en los diferentes lenguajes de la plataforma.", pero toda su extensa funcionalidad la podríamos resumir
-en Openshift es la versión empresarial de Kubernetes hecha por RedHat, Inc.![](images/media/image7.png){width="5.5in"
-height="4.097222222222222in"}
+en Openshift es la versión empresarial de Kubernetes hecha por RedHat, Inc.![](images/media/image7.png)
 
 ### Kanban y Scrum
 
@@ -746,8 +744,32 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
 
 ## Conclusiones
 
-* MicroProfile en Quarkus brinda la capacidad de observar el estado de micro servicios nativos de la nube completamente
-  utilizando estándares libres.
+* La programación asincrónica es clave para maximizar el uso de estos nuevos recursos de hardware, ya que permite lidiar
+  con más conexiones concurrentes que con los paradigmas tradicionales de bloqueo de Entrada y Salida (I/O). Los
+  servicios deben atender las cargas de trabajo que pueden cambiar drásticamente de una hora a otra, por lo tanto,
+  debemos diseñar un código que admita naturalmente la escalabilidad horizontal. Pero esto solo incrementa la
+  complejidad de las aplicaciones, algo para lo cual el monitoreo de microservicios no estaba diseñado inicialmente.
+  Rastreo distribuido ofrecer la visibilidad que estos servicios requieren.
+
+* Proveer visibilidad dentro de las aplicaciones se puede hacer mediante software libre, Elasticsearch en combinación
+  con Kibana a diferencia de otras herramientas y productos del mercado, además de ofrecer la facilidad de producción de
+  dashboards y visualizaciones relacionadas con los datos capturados por las herramientas de monitoreo, possen una
+  característica que no agrega costos a la plataforma actual de monitoreo de los servicios y aplicaciones es la politica
+  de retención de datos, algo para lo cual es este producto bastante maduro y se ofrece actualmente como lo ha venido
+  haciendo AWS y otros proveedores de la nube.
+
+* La importancia sobre la escogencia de software libre dentro de las arquitecturas y herramientas seleccionadas se
+  validan por sí mismas; cuando se inició el diseño de la plataforma de monitoreo, Elasticsearch modifico el tipo de
+  licenciamiento que venían ofreciendo, debido a que para AWS esto afecta drásticamente uno de sus productos más usados
+  ellos decidieron hacer
+  un [fork de este proyecto](https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/)
+  , esta estabilidad de soporte y disponibilidad sobre las herramientas seleccionadas es algo fundamental para el
+  mantenimiento de las aplicaciones y servicios a largo plazo en un mercado tan volátil y cambiante como los es
+  software.
+
+* Uno de los efectos directos al visualizar el monitoreo distribuido y/o aplicar la observabilidad sobre sistemas
+  complejos en los equipos de trabajo SCRUM, es que liberara de tareas de monitoreo a los desarrolladores y empoderara
+  para la toma de decisiones a los otros roles dentro del equipo.
 
 ## Referencias
 
@@ -835,10 +857,3 @@ OpenShift" [https://github.com/minishift/minishift]{.ul}
 "Kanban vs. Scrum" https://www.atlassian.com/agile/kanban/kanban-vs-scrum
 
 "Hypertrace" https://www.hypertrace.org/
-
-[^1]: Martin Fowler, James Lewis. Microservices: a definition of this new architectural
-term: https://www.martinfowler.com/articles/microservices.html.
-
-[^2]: Apesar de que el autor de "Mastering Distributed Tracing"(publicado por Packt Publishing, 2019) y creador de
-Jaeger, Yuri Shkuro, propone el uso de Prometheus, Prometheus se queda corto a la hora de ponerle sentido a la data
-recolectada, por ende usare los dashboards de Kibana

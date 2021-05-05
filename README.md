@@ -861,3 +861,5 @@ OpenShift" [https://github.com/minishift/minishift]{.ul}
 "Kanban vs. Scrum" https://www.atlassian.com/agile/kanban/kanban-vs-scrum
 
 "Hypertrace" https://www.hypertrace.org/
+
+"Solving Mysteries Faster with Observability" https://www.infoq.com/presentations/netflix-edgar-observability/

@@ -758,6 +758,14 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
   de retención de datos, algo para lo cual es este producto bastante maduro y se ofrece actualmente como lo ha venido
   haciendo AWS y otros proveedores de la nube.
 
+* Para los equipos de trabajo SCRUM que crean y usan herramientas de observabilidad, la pregunta es, ¿cómo hacemos que
+  la comprensión del comportamiento de los sistemas sea rápida y ajustable, rápida de analizar y fácil de identificar
+  cuando algo sale mal? Incluso si no está profundamente familiarizado con el funcionamiento interno y las complejidades
+  de estos servicios. Si bien puede haber muchas dashboards o almacenes de registros, solo debe haber una interfaz de
+  usuario de seguimiento distribuida. Dado que el rastreo distribuido captura el ecosistema de una solicitud, nos puede
+  dar una respuesta clara de qué servicios estaban involucrados, lo que nos permite usar el TraceID como un hilo
+  conductor para unir todos estos servicios.
+
 * La importancia sobre la escogencia de software libre dentro de las arquitecturas y herramientas seleccionadas se
   validan por sí mismas; cuando se inició el diseño de la plataforma de monitoreo, Elasticsearch modifico el tipo de
   licenciamiento que venían ofreciendo, debido a que para AWS esto afecta drásticamente uno de sus productos más usados
@@ -766,10 +774,6 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
   , esta estabilidad de soporte y disponibilidad sobre las herramientas seleccionadas es algo fundamental para el
   mantenimiento de las aplicaciones y servicios a largo plazo en un mercado tan volátil y cambiante como los es
   software.
-
-* Uno de los efectos directos al visualizar el monitoreo distribuido y/o aplicar la observabilidad sobre sistemas
-  complejos en los equipos de trabajo SCRUM, es que liberara de tareas de monitoreo a los desarrolladores y empoderara
-  para la toma de decisiones a los otros roles dentro del equipo.
 
 ## Referencias
 

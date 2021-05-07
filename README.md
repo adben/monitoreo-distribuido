@@ -744,24 +744,22 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
 
 ## Conclusiones
 
-* La programación asincrónica es clave para maximizar el uso de estos nuevos recursos de hardware, ya que permite lidiar
+* La programación asincrónica es clave para maximizar el uso de los nuevos recursos de hardware, ya que permite lidiar
   con más conexiones concurrentes que con los paradigmas tradicionales de bloqueo de Entrada y Salida (I/O). Los
   servicios deben atender las cargas de trabajo que pueden cambiar drásticamente de una hora a otra, por lo tanto,
-  debemos diseñar un código que admita naturalmente la escalabilidad horizontal. Pero esto solo incrementa la
-  complejidad de las aplicaciones, algo para lo cual el monitoreo de microservicios no estaba diseñado inicialmente.
-  Rastreo distribuido ofrecer la visibilidad que estos servicios requieren.
+  se debe diseñar un código que admita naturalmente la escalabilidad horizontal. Pero esto solo incrementa la
+  complejidad de las aplicaciones, algo para lo cual el monitoreo de microservicios no estaba diseñado inicialmente. 
+  Rastreo distribuido ofrece la visibilidad que estos servicios requieren. 
 
 * Proveer visibilidad dentro de las aplicaciones se puede hacer mediante software libre, Elasticsearch en combinación
   con Kibana a diferencia de otras herramientas y productos del mercado, además de ofrecer la facilidad de producción de
-  dashboards y visualizaciones relacionadas con los datos capturados por las herramientas de monitoreo, possen una
-  característica que no agrega costos a la plataforma actual de monitoreo de los servicios y aplicaciones es la politica
-  de retención de datos, algo para lo cual es este producto bastante maduro y se ofrece actualmente como lo ha venido
-  haciendo AWS y otros proveedores de la nube.
+  dashboards y visualizaciones relacionadas con los datos capturados por las herramientas de monitoreo, possen la politica
+  de retención de datos, la cual es una característica que no agrega costos a la plataforma actual de monitoreo de servicios y aplicaciones ,algo para lo cual este         producto resulta bastante maduro. Este se ofrece actualmente dentro de AWS y de otros proveedores de la nube.
 
-* Para los equipos de trabajo SCRUM que crean y usan herramientas de observabilidad, la pregunta es, ¿cómo hacemos que
+* Para los equipos de trabajo SCRUM que crean y usan herramientas de observabilidad, la pregunta es, ¿cómo se puede hacer que
   la comprensión del comportamiento de los sistemas sea rápida y ajustable, rápida de analizar y fácil de identificar
-  cuando algo sale mal? Incluso si no está profundamente familiarizado con el funcionamiento interno y las complejidades
-  de estos servicios. Si bien puede haber muchas dashboards o almacenes de registros, solo debe haber una interfaz de
+  cuando algo sale mal? Incluso si no se está profundamente familiarizado con el funcionamiento interno y las complejidades
+  de estos servicios. Si bien pueden haber muchas dashboards o almacenes de registros, solo debe haber una interfaz de
   usuario de seguimiento distribuida. Dado que el rastreo distribuido captura el ecosistema de una solicitud, nos puede
   dar una respuesta clara de qué servicios estaban involucrados, lo que nos permite usar el TraceID como un hilo
   conductor para unir todos estos servicios.
@@ -769,8 +767,7 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
 * La importancia sobre la escogencia de software libre dentro de las arquitecturas y herramientas seleccionadas se
   validan por sí mismas; cuando se inició el diseño de la plataforma de monitoreo, Elasticsearch modifico el tipo de
   licenciamiento que venían ofreciendo, debido a que para AWS esto afecta drásticamente uno de sus productos más usados
-  ellos decidieron hacer
-  un [fork de este proyecto](https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/)
+  ellos decidieron hacer un [fork de este proyecto](https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/)
   , esta estabilidad de soporte y disponibilidad sobre las herramientas seleccionadas es algo fundamental para el
   mantenimiento de las aplicaciones y servicios a largo plazo en un mercado tan volátil y cambiante como los es
   software.

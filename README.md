@@ -382,6 +382,13 @@ enchufable para el almacenamiento span.
 
 ## Plataforma de observabilidad
 
+Con la arquitectura de la plataforma de observabilidad centralizamos en Elasticsearch la data correspondiente al
+rastreo, las métricas y los logs(registros de las aplicaciones) de los microservicios.
+
+![](images/media/Plataforma.png)
+
+Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
+
 * Desplegar el contendor de Elasticsearch
 
 ```shell
@@ -590,6 +597,9 @@ process.serviceName : "desdequarkus"
 Ahora nuestras trazas persistidas no solamente seran habilitadas para su búsqueda, sino que también podremos navegar
 fácilmente al detalle de esta traza en el contexto de Jaeger. Luego cuando desarrollemos las visualizaciones veremos la
 utilidad de esta funcionalidad.
+
+La data recopilada por la observabilidad alimentarán las visualizaciones de los Paneles de Kibana.
+![](images/media/Dashboard_example.png)
 
 ## Herramientas y estándares
 

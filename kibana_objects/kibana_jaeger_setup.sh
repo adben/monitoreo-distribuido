@@ -22,7 +22,7 @@ curl --header "Content-Type: application/json" -X POST "http://${KIBANA_HOST}:${
             "match_mapping_type": "long",
             "mapping": {
               "type": "long",
-              "index": false
+              "index": true
             }
           }
         },
@@ -31,7 +31,7 @@ curl --header "Content-Type: application/json" -X POST "http://${KIBANA_HOST}:${
             "match_mapping_type": "double",
             "mapping": {
               "type": "float",
-              "index": false
+              "index": true
             }
           }
         }

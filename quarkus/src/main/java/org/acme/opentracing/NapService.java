@@ -1,7 +1,9 @@
 package org.acme.opentracing;
 
 import io.opentracing.Span;
+import io.opentracing.log.Fields;
 import io.opentracing.tag.Tags;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
@@ -11,6 +13,7 @@ import org.eclipse.microprofile.opentracing.Traced;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Traced
 @ApplicationScoped
@@ -35,45 +38,55 @@ public class NapService {
     public String longerNap() {
 
         final String filename = "lorem-ipsum" + Thread.currentThread().getName() + ".txt";
-        final Span span = configuredTracer.activeSpan();
+        final Span span = GlobalTracer.get().buildSpan("someBusinessSpan").asChildOf(configuredTracer.activeSpan()).start();
         span.log("Received request on Thread: " + Thread.currentThread().getName());
-
-        vertx.fileSystem().open("filename", new OpenOptions(), toOpen -> {
-            if (toOpen.succeeded()) {
-                Buffer buff = Buffer.buffer(Pi.computePi(20000).toString()); //heavy shit
-                AsyncFile file = toOpen.result();
-                file.write(buff, toWrite -> {
-                    if (toWrite.succeeded()) {
-                        span.log("done");
-                        vertx.fileSystem().props(filename, toReadProps -> {
-                            if (toReadProps.succeeded()) {
-                                span.setTag("file.size", toReadProps.result().size());
-                                vertx.fileSystem().delete(filename, toDelete -> {
-                                    if (toDelete.succeeded()) {
-                                        span.log("deleted");
+        vertx.fileSystem().createFile(filename, toCreate -> {
+            if (toCreate.succeeded()) {
+                vertx.fileSystem().open(filename, new OpenOptions(), toOpen -> {
+                    if (toOpen.succeeded()) {
+                        Buffer buff = Buffer.buffer(Pi.computePi(20000).toString()); //heavy shit
+                        AsyncFile file = toOpen.result();
+                        file.write(buff, toWrite -> {
+                            if (toWrite.succeeded()) {
+                                span.log("done");
+                                vertx.fileSystem().props(filename, toReadProps -> {
+                                    if (toReadProps.succeeded()) {
+                                        span.setTag("file.size", toReadProps.result().size());
+                                        vertx.fileSystem().delete(filename, toDelete -> {
+                                            if (toDelete.succeeded()) {
+                                                span.log("deleted");
+                                                span.finish();
+                                            } else {
+                                                spanTagError(span, "failed_deleting", toDelete.cause());
+                                            }
+                                        });
                                     } else {
-                                        spanTagError(span, "failed_deleting", toDelete.cause());
+                                        spanTagError(span, "failed_reading", toReadProps.cause());
                                     }
                                 });
                             } else {
-                                spanTagError(span, "failed_reading", toReadProps.cause());
+                                spanTagError(span, "failed_writing", toWrite.cause());
                             }
                         });
                     } else {
-                        spanTagError(span, "failed_writing", toWrite.cause());
+                        spanTagError(span, "failed_opening", toOpen.cause());
                     }
                 });
             } else {
-                spanTagError(span, "failed_opening", toOpen.cause());
+                spanTagError(span, "failed_creating", toCreate.cause());
             }
+
         });
+
 
         return "longer nap";
     }
 
-    private void spanTagError(Span span, String message, Throwable cause) {
-        span.setTag(String.valueOf(Tags.ERROR), true);
-        span.log(message + cause);
+    private void spanTagError(Span span, String kibanaFlag, Throwable cause) {
+        Tags.ERROR.set(span, true);
+        span.log(Map.of(Fields.EVENT, "error", Fields.ERROR_OBJECT, cause, Fields.MESSAGE, cause.getMessage()));
+        span.log(kibanaFlag);
+        span.finish();
     }
 
 }

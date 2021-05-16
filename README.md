@@ -383,9 +383,11 @@ enchufable para el almacenamiento span.
 ## Plataforma de observabilidad
 
 Con la arquitectura de la plataforma de observabilidad centralizamos en Elasticsearch la data correspondiente al
-rastreo, las métricas y los logs(registros de las aplicaciones) de los microservicios.
+rastreo(flecha verde), las métricas(flecha purpura) y los logs(registros de las aplicaciones identificados con la flecha
+naranja) de los microservicios. En la aplicacion ejemplo, los logs son tomados de Jaeger y las metricas no seran tomadas
+en cuenta, asi que ignoraremos Logstash y Beats.
 
-![](images/media/Plataforma.png)
+![](images/media/platform_v2.png)
 
 Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
 
@@ -413,7 +415,9 @@ Actualmente los campos indexados en Elasticsearch provenientes desde Jaeger son 
 cuando se requieren realizar simples dashboards en kibana, pero para efectuar visualizaciones más potentes y realizar
 cálculos en los mismos, hemos de requerir esos campos como numéricos, ese mapeo lo podemos efectuar de la siguiente
 forma modificando el mapeo sobre el índice de Jaeger, hemos de ser precavidos con el orden de esta template y el orden
-que se carga el mapeo de Jaeger
+que se carga el mapeo de Jaeger (tambien se puede ejecutar el script ```kibana_jaeger_setup.sh```
+desde la ruta```./kibana-objects``` que además de incluir los cambios requeridos para dicho mapeo, incluye también las
+visualizaciones ejemplo y una de las dashboards)
 
 ```Shell
 curl --header "Content-Type: application/json" \
@@ -756,28 +760,31 @@ equipos en proyectos de software que usen micro servicios JVM en ambientes distr
 
 * La programación asincrónica es clave para maximizar el uso de los nuevos recursos de hardware, ya que permite lidiar
   con más conexiones concurrentes que con los paradigmas tradicionales de bloqueo de Entrada y Salida (I/O). Los
-  servicios deben atender las cargas de trabajo que pueden cambiar drásticamente de una hora a otra, por lo tanto,
-  se debe diseñar un código que admita naturalmente la escalabilidad horizontal. Pero esto solo incrementa la
-  complejidad de las aplicaciones, algo para lo cual el monitoreo de microservicios no estaba diseñado inicialmente. 
-  Rastreo distribuido ofrece la visibilidad que estos servicios requieren. 
+  servicios deben atender las cargas de trabajo que pueden cambiar drásticamente de una hora a otra, por lo tanto, se
+  debe diseñar un código que admita naturalmente la escalabilidad horizontal. Pero esto solo incrementa la complejidad
+  de las aplicaciones, algo para lo cual el monitoreo de microservicios no estaba diseñado inicialmente. Rastreo
+  distribuido ofrece la visibilidad que estos servicios requieren.
 
 * Proveer visibilidad dentro de las aplicaciones se puede hacer mediante software libre, Elasticsearch en combinación
   con Kibana a diferencia de otras herramientas y productos del mercado, además de ofrecer la facilidad de producción de
-  dashboards y visualizaciones relacionadas con los datos capturados por las herramientas de monitoreo, possen la politica
-  de retención de datos, la cual es una característica que no agrega costos a la plataforma actual de monitoreo de servicios y aplicaciones ,algo para lo cual este         producto resulta bastante maduro. Este se ofrece actualmente dentro de AWS y de otros proveedores de la nube.
+  dashboards y visualizaciones relacionadas con los datos capturados por las herramientas de monitoreo, possen la
+  politica de retención de datos, la cual es una característica que no agrega costos a la plataforma actual de monitoreo
+  de servicios y aplicaciones ,algo para lo cual este producto resulta bastante maduro. Este se ofrece actualmente
+  dentro de AWS y de otros proveedores de la nube.
 
-* Para los equipos de trabajo SCRUM que crean y usan herramientas de observabilidad, la pregunta es, ¿cómo se puede hacer que
-  la comprensión del comportamiento de los sistemas sea rápida y ajustable, rápida de analizar y fácil de identificar
-  cuando algo sale mal? Incluso si no se está profundamente familiarizado con el funcionamiento interno y las complejidades
-  de estos servicios. Si bien pueden haber muchas dashboards o almacenes de registros, solo debe haber una interfaz de
-  usuario de seguimiento distribuida. Dado que el rastreo distribuido captura el ecosistema de una solicitud, nos puede
-  dar una respuesta clara de qué servicios estaban involucrados, lo que nos permite usar el TraceID como un hilo
-  conductor para unir todos estos servicios.
+* Para los equipos de trabajo SCRUM que crean y usan herramientas de observabilidad, la pregunta es, ¿cómo se puede
+  hacer que la comprensión del comportamiento de los sistemas sea rápida y ajustable, rápida de analizar y fácil de
+  identificar cuando algo sale mal? Incluso si no se está profundamente familiarizado con el funcionamiento interno y
+  las complejidades de estos servicios. Si bien pueden haber muchas dashboards o almacenes de registros, solo debe haber
+  una interfaz de usuario de seguimiento distribuida. Dado que el rastreo distribuido captura el ecosistema de una
+  solicitud, nos puede dar una respuesta clara de qué servicios estaban involucrados, lo que nos permite usar el TraceID
+  como un hilo conductor para unir todos estos servicios.
 
 * La importancia sobre la escogencia de software libre dentro de las arquitecturas y herramientas seleccionadas se
   validan por sí mismas; cuando se inició el diseño de la plataforma de monitoreo, Elasticsearch modifico el tipo de
   licenciamiento que venían ofreciendo, debido a que para AWS esto afecta drásticamente uno de sus productos más usados
-  ellos decidieron hacer un [fork de este proyecto](https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/)
+  ellos decidieron hacer
+  un [fork de este proyecto](https://aws.amazon.com/blogs/opensource/stepping-up-for-a-truly-open-source-elasticsearch/)
   , esta estabilidad de soporte y disponibilidad sobre las herramientas seleccionadas es algo fundamental para el
   mantenimiento de las aplicaciones y servicios a largo plazo en un mercado tan volátil y cambiante como los es
   software.

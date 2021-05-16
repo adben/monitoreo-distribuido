@@ -5,7 +5,6 @@ import org.eclipse.microprofile.opentracing.Traced;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Traced
 @ApplicationScoped
@@ -20,7 +19,7 @@ public class NapService {
         configuredTracer.activeSpan().setTag("out.computed.pi", bigDecimal);
         configuredTracer.activeSpan().log("Doing some load");
         configuredTracer.activeSpan().log("Back from the nap: " + Thread.currentThread().getName());
-        return "Nap from " + new Date().toString();
+        return "Nap";
     }
 
 }

@@ -28,7 +28,7 @@ public class ApacheClient extends Thread {
     public void run() {
         // Apache HTTPClient creation
         final Random random = new Random();
-        final String uri = "http://localhost:8080/".concat((random.nextInt(7)) % 2 != 0 ? "nap" : "hello");
+        final String uri = "http://localhost:8080/".concat((random.nextInt(7)) % 2 != 0 ? "nap" : "long-nap");
         HttpGet httpGet = new HttpGet(uri);
         // HttpGet httpGet = new HttpGet("http://localhost:8080/helloworld-rs/rest/json");
         HttpClient httpClient = HttpClientBuilder.create().build();

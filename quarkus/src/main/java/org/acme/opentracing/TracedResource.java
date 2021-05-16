@@ -52,4 +52,14 @@ public class TracedResource {
                 .build(ResourceClient.class);
         return "chain -> " + piBean.nap() + " -> " + resourceClient.hello();
     }
+
+    @GET
+    @Path("/long-nap")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String doLongNap() {
+        ResourceClient resourceClient = RestClientBuilder.newBuilder()
+                .baseUri(uriInfo.getBaseUri())
+                .build(ResourceClient.class);
+        return "chain -> " + piBean.longerNap() + " -> " + resourceClient.hello();
+    }
 }

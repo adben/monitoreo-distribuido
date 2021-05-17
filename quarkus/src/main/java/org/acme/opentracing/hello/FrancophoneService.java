@@ -1,4 +1,4 @@
-package org.acme.opentracing;
+package org.acme.opentracing.hello;
 
 import javax.enterprise.context.ApplicationScoped;
 

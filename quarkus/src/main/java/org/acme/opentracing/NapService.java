@@ -14,6 +14,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 @Traced
 @ApplicationScoped
@@ -85,7 +87,7 @@ public class NapService {
     private void spanTagError(Span span, String kibanaFlag, Throwable cause) {
         Tags.ERROR.set(span, true);
         span.log(Map.of(Fields.EVENT, "error", Fields.ERROR_OBJECT, cause, Fields.MESSAGE, cause.getMessage()));
-        span.log(kibanaFlag);
+        span.setTag("error-recorded", kibanaFlag);
         span.finish();
     }
 

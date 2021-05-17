@@ -71,3 +71,7 @@ serviceAccount.json
 
 .idea
 *.iml
+
+*.DS_Store
+
+/client/target/*

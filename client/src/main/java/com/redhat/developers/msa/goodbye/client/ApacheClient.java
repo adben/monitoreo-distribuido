@@ -27,8 +27,7 @@ public class ApacheClient extends Thread {
 
     public void run() {
         // Apache HTTPClient creation
-        final Random random = new Random();
-        final String uri = "http://localhost:8080/".concat((random.nextInt(7)) % 2 != 0 ? "nap" : "long-nap");
+        final String uri = "http://localhost:8080/".concat(obtainSuffix());
         HttpGet httpGet = new HttpGet(uri);
         // HttpGet httpGet = new HttpGet("http://localhost:8080/helloworld-rs/rest/json");
         HttpClient httpClient = HttpClientBuilder.create().build();
@@ -42,6 +41,22 @@ public class ApacheClient extends Thread {
             result = "Nap message (Fallback)";
         }
         System.out.println(String.format("#%s - %s", this.getName(), result));
+    }
+
+    private String obtainSuffix() {
+        final Random random = new Random();
+        switch (random.nextInt(3)) {
+            case 0:
+                return "long-nap";
+            case 1:
+                return "nap";
+            case 2:
+                return "chain";
+            default:
+                return "hello"; //hahaha
+        }
+
+
     }
 
 }

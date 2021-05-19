@@ -14,8 +14,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 @Traced
 @ApplicationScoped

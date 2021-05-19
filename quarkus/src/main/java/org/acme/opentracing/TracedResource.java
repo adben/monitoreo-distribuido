@@ -1,7 +1,8 @@
 package org.acme.opentracing;
 
-import org.acme.opentracing.hello.FrancophoneService;
-import org.acme.opentracing.hello.SpanishSpeakingService;
+import org.acme.opentracing.services.FrancophoneService;
+import org.acme.opentracing.services.NapService;
+import org.acme.opentracing.services.SpanishSpeakingService;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.jboss.logging.Logger;
 

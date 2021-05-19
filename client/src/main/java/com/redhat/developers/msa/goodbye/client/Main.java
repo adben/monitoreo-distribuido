@@ -18,7 +18,7 @@ package com.redhat.developers.msa.goodbye.client;
 
 public class Main {
 
-    private static final int NUMBER_THREADS = 500;
+    private static final int NUMBER_THREADS = 350;
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Starting Threads");

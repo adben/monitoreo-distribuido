@@ -1,4 +1,4 @@
-package org.acme.opentracing;
+package org.acme.opentracing.services;
 
 import io.opentracing.Span;
 import io.opentracing.log.Fields;
@@ -8,16 +8,22 @@ import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.OpenOptions;
+import org.acme.opentracing.Pi;
+import org.acme.opentracing.TracedResource;
 import org.eclipse.microprofile.opentracing.Traced;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.UUID;
 
-@Traced
+@Traced(operationName = "NapService")
 @ApplicationScoped
 public class NapService {
+
+    private static final Logger LOG = Logger.getLogger(NapService.class);
 
     @Inject
     io.opentracing.Tracer configuredTracer;
@@ -48,7 +54,8 @@ public class NapService {
                         AsyncFile file = toOpen.result();
                         file.write(buff, toWrite -> {
                             if (toWrite.succeeded()) {
-                                span.log("done");
+                                span.log("done writing file");
+                                LOG.info("wrote " + filename);
                                 vertx.fileSystem().props(filename, toReadProps -> {
                                     if (toReadProps.succeeded()) {
                                         span.setTag("file.size", toReadProps.result().size());

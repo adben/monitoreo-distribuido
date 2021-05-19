@@ -1,10 +1,10 @@
-package org.acme.opentracing.hello;
+package org.acme.opentracing.services;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.opentracing.Traced;
 
-@Traced
+@Traced(operationName = "FranceService")
 @ApplicationScoped
 public class FrancophoneService {
 

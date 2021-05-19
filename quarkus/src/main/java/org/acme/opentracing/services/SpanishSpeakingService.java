@@ -1,11 +1,11 @@
-package org.acme.opentracing.hello;
+package org.acme.opentracing.services;
 
 import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-@Traced
+@Traced(operationName = "SpanishService")
 @ApplicationScoped
 public class SpanishSpeakingService {
 

@@ -9,7 +9,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.OpenOptions;
 import org.acme.opentracing.Pi;
-import org.acme.opentracing.TracedResource;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.logging.Logger;
 
@@ -17,7 +16,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.UUID;
 
 @Traced(operationName = "NapService")
 @ApplicationScoped

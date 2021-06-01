@@ -394,13 +394,13 @@ Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
 * Desplegar el contendor de Elasticsearch
 
 ```shell
-docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.13.0
 ```
 
 * Desplegar el contendor de Kibana
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.12.1
+docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.13.0
 ```
 
 * Desplegar el contendor de Jaeger

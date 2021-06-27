@@ -70,16 +70,4 @@ public class TracedResource {
         return piBean.longerNap();
     }
 
-    /*** TODO ElasticMeterRegistry Metrics ***/
-//    private final MeterRegistry registry;
-//
-//    TracedResource() {
-//        this.registry = new ElasticMeterRegistry(new ElasticConfig() {
-//            @Override
-//            public String get(String key) {
-//                return null;
-//            }
-//        });
-//
-//    }
 }

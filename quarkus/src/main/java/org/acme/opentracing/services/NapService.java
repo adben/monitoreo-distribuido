@@ -44,32 +44,11 @@ public class NapService {
         final String filename = "lorem-ipsum" + Thread.currentThread().getName() + ".txt";
         final Span span = GlobalTracer.get().buildSpan("someBusinessSpan").asChildOf(configuredTracer.activeSpan()).start();
         span.log("Received request on Thread: " + Thread.currentThread().getName());
-//        final FileSystem fileSystem = vertx.fileSystem();
-//        fileSystem.createFile(filename)
-//                .onFailure(x -> spanTagError(span, "failed_creating", x))
-//                .compose(__ -> fileSystem.open(filename, new OpenOptions()))
-//                .onFailure(x -> spanTagError(span, "failed_opening", x))
-//                .onSuccess(open -> open.write(Buffer.buffer(Pi.computePi(20000).toString())))
-//                .onSuccess(write -> {
-//                    span.log("done writing file");
-//                    LOG.info("wrote " + filename);
-//                })
-//                .onFailure(x -> spanTagError(span, "failed_writing", x))
-//                .compose(__ -> fileSystem.props(filename))
-//                .onFailure(x -> spanTagError(span, "failed_reading_props", x))
-//                .onSuccess(props -> span.setTag("file.size", props.size()))
-//                .compose(__ -> fileSystem.delete(filename))
-//                .onSuccess(deleted -> {
-//                    span.log("deleted");
-//                    span.finish();
-//                })
-//                .onFailure(x -> spanTagError(span, "failed_deleting", x))
-//                .mapEmpty();
         vertx.fileSystem().createFile(filename, toCreate -> {
             if (toCreate.succeeded()) {
                 vertx.fileSystem().open(filename, new OpenOptions(), toOpen -> {
                     if (toOpen.succeeded()) {
-                        Buffer buff = Buffer.buffer(Pi.computePi(20000).toString()); //heavy shit
+                        Buffer buff = Buffer.buffer(Pi.computePi(20000).toString());
                         AsyncFile file = toOpen.result();
                         file.write(buff, toWrite -> {
                             if (toWrite.succeeded()) {

@@ -394,19 +394,19 @@ Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
 * Desplegar el contendor de Elasticsearch
 
 ```shell
-docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.13.1
+docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.15.1
 ```
 
 * Desplegar el contendor de Kibana
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.13.1
+docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.15.1
 ```
 
 * Desplegar el contendor de Jaeger
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 jaegertracing/all-in-one:1.23.0
+docker run --rm -it --link=elasticsearch --name=jaeger -e SPAN_STORAGE_TYPE=elasticsearch -e ES_SERVER_URLS=http://elasticsearch:9200 -e ES_TAGS_AS_FIELDS_ALL=true -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 jaegertracing/all-in-one:1.27.0
 ```
 
 * Modificar el mapeo de los campos numéricos en Jaeger
@@ -464,7 +464,7 @@ obteniendo:
 * Verificar la instrumentación con la aplicación ejemplo de Jaeger
 
 ```shell
-docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_PORT=6831 -p9080-9083:8080-8083 jaegertracing/example-hotrod:1.23.0
+docker run --rm --link jaeger --env JAEGER_AGENT_HOST=jaeger --env JAEGER_AGENT_PORT=6831 -p9080-9083:8080-8083 jaegertracing/example-hotrod:1.27.0
 ```
 
 Ahora bien, vamos a acceder a la [aplicación ejemplo](http://127.0.0.1:9080/) de jaeger(micro-servicios ya

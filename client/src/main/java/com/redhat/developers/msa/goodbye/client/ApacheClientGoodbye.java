@@ -36,7 +36,7 @@ public class ApacheClientGoodbye extends Thread {
             // Fallback
             result = "Nap message (Fallback)";
         }
-        System.out.println(String.format("#%s - %s", this.getName(), result));
+        System.out.printf("#%s - %s%n", this.getName(), result);
     }
 
 }

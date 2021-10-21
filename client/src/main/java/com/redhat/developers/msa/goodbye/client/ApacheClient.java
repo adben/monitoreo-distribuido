@@ -53,7 +53,7 @@ public class ApacheClient extends Thread {
             case 2:
                 return "chain";
             default:
-                return "hello"; //hahaha
+                return "hello";
         }
 
 

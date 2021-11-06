@@ -393,6 +393,8 @@ Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
 
 * Desplegar el contendor de Elasticsearch
 
+Desde la version 7.15 estamos desplegando el contenedor de Elasticsearch via ```docker-compose up``` usando el archivo ```es_objects/docker-compose.yml```.
+
 ```shell
 docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.15.1
 ```

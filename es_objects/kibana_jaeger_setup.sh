@@ -1,4 +1,5 @@
 KIBANA_HOST=localhost
+ELASTIC_HOST=localhost
 KIBANA_PORT=5601
 ELASTIC_PORT=9200
 ELASTIC_USER=
@@ -9,7 +10,7 @@ if [ -n "${ELASTIC_USER}" ]; then
 fi
 
 ##fixes the numeric mapping
-curl --header "Content-Type: application/json" -X POST "http://${KIBANA_HOST}:${ELASTIC_PORT}/_template/custom-jaeger-span?include_type_name" --data '{
+curl --header "Content-Type: application/json" -X POST "http://${ELASTIC_HOST}:${ELASTIC_PORT}/_template/custom-jaeger-span?include_type_name" --data '{
   "order": 90,
   "index_patterns": [
     "*jaeger-span-*"

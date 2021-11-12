@@ -1,8 +1,10 @@
 package org.acme.opentracing;
 
+import io.smallrye.mutiny.Uni;
 import org.acme.opentracing.services.FrancophoneService;
 import org.acme.opentracing.services.NapService;
 import org.acme.opentracing.services.SpanishSpeakingService;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.jboss.logging.Logger;
 
@@ -54,20 +56,21 @@ public class TracedResource {
     @GET
     @Path("/nap")
     @Produces(MediaType.TEXT_PLAIN)
-    public String doNap() {
+    public Uni<String> doNap() {
         LOG.info("nap");
         ResourceClient client = RestClientBuilder.newBuilder()
                 .baseUri(uriInfo.getBaseUri())
                 .build(ResourceClient.class);
-        return "chain -> " + piBean.nap() + " -> " + client.hello();
+        return Uni.createFrom().item("chain -> " + piBean.nap() + " -> " + client.hello());
     }
 
     @GET
     @Path("/long-nap")
     @Produces(MediaType.TEXT_PLAIN)
-    public String doLongNap() {
+    @Traced(operationName = "long-nap")
+    public Uni<String> doLongNap() {
         LOG.info("long-nap");
-        return piBean.longerNap();
+        return Uni.createFrom().item(piBean.longerNap().result());
     }
 
 }

@@ -15,13 +15,6 @@ public class Pi implements java.io.Serializable {
     private static final long serialVersionUID = 227L;
     private static final BigDecimal FOUR = BigDecimal.valueOf(4);
 
-   /*
-   public static void main(String[] args) {
-       BigDecimal result = computePi(Integer.parseInt(args[0]));
-       System.out.println("Pi is " + result);
-   }
-   */
-
     /**
      * Compute the value of pi to the specified number of digits after the
      * decimal point. The value is computed using Machin's formula:
@@ -54,11 +47,7 @@ public class Pi implements java.io.Serializable {
             numer = numer.divide(invX2, scale, HALF_EVEN);
             int denom = 2 * i + 1;
             term = numer.divide(BigDecimal.valueOf(denom), scale, HALF_EVEN);
-            if ((i % 2) != 0) {
-                result = result.subtract(term);
-            } else {
-                result = result.add(term);
-            }
+            result = (i % 2) != 0 ? result.subtract(term) : result.add(term);
             i++;
         } while (term.compareTo(BigDecimal.ZERO) != 0);
         return result;

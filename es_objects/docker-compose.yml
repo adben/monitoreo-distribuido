@@ -104,13 +104,6 @@ services:
       - 5778:5778
       - 16686:16686
       - 14268:14268
-    working_dir: /
-    volumes:
-      - ./kibana_jaeger_setup.sh:/kibana_jaeger_setup.sh
-    entrypoint: sh -c "/kibana_jaeger_setup.sh"
-    depends_on:
-      - es01
-      - kibana
     networks:
       - elastic
 

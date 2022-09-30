@@ -23,8 +23,8 @@ public class Pi implements java.io.Serializable {
      */
     public static BigDecimal computePi(int digits) {
         int scale = digits + 5;
-        BigDecimal arctan1_5 = arcTan(5, scale);
-        BigDecimal arctan1_239 = arcTan(239, scale);
+        final BigDecimal arctan1_5 = arcTan(5, scale);
+        final BigDecimal arctan1_239 = arcTan(239, scale);
         BigDecimal pi = arctan1_5.multiply(FOUR).subtract(arctan1_239).multiply(FOUR);
         return pi.setScale(digits, HALF_UP);
     }
@@ -37,16 +37,16 @@ public class Pi implements java.io.Serializable {
      * arctan(x) = x - (x^3)/3 + (x^5)/5 - (x^7)/7 + (x^9)/9 ...
      */
     public static BigDecimal arcTan(int inverseX, int scale) {
-        BigDecimal result, numer, term;
+        BigDecimal result, invScale, term;
         BigDecimal invX = BigDecimal.valueOf(inverseX);
         BigDecimal invX2 = BigDecimal.valueOf((long) inverseX * inverseX);
-        numer = BigDecimal.ONE.divide(invX, scale, HALF_EVEN);
-        result = numer;
+        invScale = BigDecimal.ONE.divide(invX, scale, HALF_EVEN);
+        result = invScale;
         int i = 1;
         do {
-            numer = numer.divide(invX2, scale, HALF_EVEN);
+            invScale = invScale.divide(invX2, scale, HALF_EVEN);
             int denom = 2 * i + 1;
-            term = numer.divide(BigDecimal.valueOf(denom), scale, HALF_EVEN);
+            term = invScale.divide(BigDecimal.valueOf(denom), scale, HALF_EVEN);
             result = (i % 2) != 0 ? result.subtract(term) : result.add(term);
             i++;
         } while (term.compareTo(BigDecimal.ZERO) != 0);

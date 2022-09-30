@@ -393,16 +393,16 @@ Para esto, vamos a desplegar los contenedores haciendo del docker namespace:
 
 * Desplegar el contendor de Elasticsearch
 
-Desde la version 8.4.2 estamos desplegando el contenedor de Elasticsearch via ```docker-compose up``` usando el archivo ```es_objects/docker-compose.yml```.
+Desde la version 7.17.6 estamos desplegando el contenedor de Elasticsearch via ```docker-compose up``` usando el archivo ```es_objects/docker-compose.yml```.
 
 ```shell
-docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.4.2
+docker run --rm -it --name=elasticsearch -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:7.17.6
 ```
 
 * Desplegar el contendor de Kibana
 
 ```shell
-docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:8.4.2
+docker run --rm -it --link=elasticsearch --name=kibana -p 5601:5601 docker.elastic.co/kibana/kibana:7.17.6
 ```
 
 * Desplegar el contendor de Jaeger

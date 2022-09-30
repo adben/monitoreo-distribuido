@@ -42,7 +42,8 @@ public class NapService {
     }
 
     public Future<String> longerNap() {
-        final String filename = "lorem-ipsum" + UUID.randomUUID() + ".txt";
+        final String filename = "lorem-ipsum" + Thread.currentThread().getName() + ".txt";
+        //final String filename = "lorem-ipsum" + UUID.randomUUID() + ".txt";
         final Span span = GlobalTracer.get().buildSpan("someBusinessSpan").asChildOf(configuredTracer.activeSpan()).start();
         span.log("Received request on Thread: " + Thread.currentThread().getName());
         final FileSystem fileSystem = vertx.fileSystem();

@@ -17,7 +17,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.UUID;
 
 @Traced(operationName = "NapService")
 @ApplicationScoped
@@ -41,29 +40,33 @@ public class NapService {
         return "Nap";
     }
 
-    public Future<String> longerNap() {
+    public Future<String> storeResultInFile() {
         final String filename = "lorem-ipsum" + Thread.currentThread().getName() + ".txt";
         //final String filename = "lorem-ipsum" + UUID.randomUUID() + ".txt";
-        final Span span = GlobalTracer.get().buildSpan("someBusinessSpan").asChildOf(configuredTracer.activeSpan()).start();
+        final Span span = GlobalTracer.get().buildSpan("aExpensiveOperation").asChildOf(configuredTracer.activeSpan()).start();
         span.log("Received request on Thread: " + Thread.currentThread().getName());
         final FileSystem fileSystem = vertx.fileSystem();
 
         return fileSystem.createFile(filename)
-                .onFailure(cause -> spanTagError(span, "failed_creating", cause))
+                .onFailure(cause -> spanTagError(span, "failed_creating_file", cause))
                 .compose(__ -> fileSystem.open(filename, new OpenOptions()))
-                .onFailure(cause -> spanTagError(span, "failed_opening", cause))
-                .onSuccess(open -> open.write(Buffer.buffer(Pi.computePi(20000).toString())))
+                .onFailure(cause -> spanTagError(span, "failed_opening_file", cause))
+                .compose(open -> {
+                    final String resultCalculations = Pi.computePi(20000).toString();
+                    span.setTag("out.computed.pi", resultCalculations);
+                    return open.write(Buffer.buffer(resultCalculations));
+                })
                 .onSuccess(write -> span.log(String.format("done writing file %s", filename)))
                 .onComplete(__ -> LOG.info("wrote " + filename))
-                .onFailure(cause -> spanTagError(span, "failed_writing", cause))
+                .onFailure(cause -> spanTagError(span, "failed_writing_file", cause))
                 .compose(__ -> fileSystem.props(filename))
-                .onFailure(cause -> spanTagError(span, "failed_reading_props", cause))
+                .onFailure(cause -> spanTagError(span, "failed_reading_file_props", cause))
                 .onSuccess(props -> span.setTag("file.size", props.size()))
                 .compose(__ -> fileSystem.delete(filename))
-                .onSuccess(deleted -> span.log("deleted"))
+                .onSuccess(deleted -> span.log("file deleted"))
                 .onSuccess(complete -> span.finish())
-                .onFailure(x -> spanTagError(span, "failed_deleting", x))
-                .map(__ -> "longer Nap");
+                .onFailure(x -> spanTagError(span, "failed_deleting_file", x))
+                .mapEmpty();
     }
 
     private void spanTagError(Span span, String kibanaFlag, Throwable cause) {

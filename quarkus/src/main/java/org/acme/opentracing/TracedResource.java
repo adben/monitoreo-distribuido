@@ -65,12 +65,11 @@ public class TracedResource {
     }
 
     @GET
-    @Path("/long-nap")
+    @Path("/expensive-operation")
     @Produces(MediaType.TEXT_PLAIN)
-    @Traced(operationName = "long-nap")
-    public Uni<String> doLongNap() {
-        LOG.info("long-nap");
-        return Uni.createFrom().item(piBean.longerNap().result());
+    @Traced(operationName = "expensive-operation")
+    public Uni<String> doExpensiveOperation() {
+        LOG.info("expensive-operation");
+        return Uni.createFrom().item(piBean.storeResultInFile().result());
     }
-
 }

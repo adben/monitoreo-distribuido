@@ -16,38 +16,41 @@
  */
 package com.redhat.developers.msa.goodbye.client;
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.util.Random;
 
 public class ApacheClient extends Thread {
 
+    Random random;
+
+    public ApacheClient() {
+        random = new Random();
+    }
+
+    @Override
     public void run() {
         // Apache HTTPClient creation
         final String uri = "http://localhost:8080/".concat(obtainSuffix());
         HttpGet httpGet = new HttpGet(uri);
-        // HttpGet httpGet = new HttpGet("http://localhost:8080/helloworld-rs/rest/json");
-        HttpClient httpClient = HttpClientBuilder.create().build();
-
-        // Service invocation
-        String result;
-        try {
-            result = EntityUtils.toString(httpClient.execute(httpGet).getEntity());
+        try (final CloseableHttpClient httpClient = HttpClients.createDefault();
+             final CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            final String result = EntityUtils.toString(response.getEntity());
+            System.out.printf("#%s - %s%n", this.getName(), result);
         } catch (Exception e) {
-            // Fallback
-            result = "Nap message (Fallback)";
+            System.out.printf("#%s - %s%n", this.getName(), "client error");
         }
-        System.out.println(String.format("#%s - %s", this.getName(), result));
+
     }
 
     private String obtainSuffix() {
-        final Random random = new Random();
         switch (random.nextInt(3)) {
             case 0:
-                return "long-nap";
+                return "expensive-operation";
             case 1:
                 return "nap";
             case 2:

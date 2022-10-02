@@ -40,9 +40,10 @@ public class ApacheClient extends Thread {
         try (final CloseableHttpClient httpClient = HttpClients.createDefault();
              final CloseableHttpResponse response = httpClient.execute(httpGet)) {
             final String result = EntityUtils.toString(response.getEntity());
-            System.out.printf("#%s - %s%n", this.getName(), result);
+            EntityUtils.consume(response.getEntity());
+            System.out.printf("#%s - %s - %s - %n", this.getName(), uri, result);
         } catch (Exception e) {
-            System.out.printf("#%s - %s%n", this.getName(), "client error");
+            System.out.printf("#%s - %s - %s - client error", this.getName(), uri);
         }
 
     }

@@ -11,6 +11,11 @@ services:
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health?wait_for_status=green&timeout=1s", "||", "exit", "1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
     ulimits:
       memlock:
         soft: -1
@@ -65,29 +70,37 @@ services:
     environment:
       - "ELASTICSEARCH_HOSTS=http://es01:9200"
       - "KIBANA_JAVA_OPTS=-Xms512m -Xmx512m"
+      - XPACK_MONITORING_ENABLED=false
     ports:
       - 5601:5601
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:5601/status", "||", "exit", "1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
     networks:
       - elastic
     depends_on:
-      - es01
+      es01:
+        condition: service_healthy
+    restart: "unless-stopped"
   glue-elk-jaeger:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: elk-jaeger
+    container_name: glue-elk-jaeger
     working_dir: /
     volumes:
-      - ./kibana_jaeger_setup.sh:/kibana_jaeger_setup.sh
-      - ./kibana-dashboard.ndjson:/kibana-dashboard.ndjson
       - ./kibana-jaeger-index.ndjson:/kibana-jaeger-index.ndjson
       - ./kibana-visualizations.ndjson:/kibana-visualizations.ndjson
+      - ./kibana-dashboard.ndjson:/kibana-dashboard.ndjson
+      - ./kibana_jaeger_setup.sh:/kibana_jaeger_setup.sh
     entrypoint: sh -c "/kibana_jaeger_setup.sh"
     networks:
       - elastic
     depends_on:
-      - es01
-      - kibana
+      kibana:
+        condition: service_healthy
   jaeger:
     image: jaegertracing/all-in-one:1.38
     container_name: jaeger
@@ -104,6 +117,8 @@ services:
       - 5778:5778
       - 16686:16686
       - 14268:14268
+    depends_on:
+      - glue-elk-jaeger
     networks:
       - elastic
 

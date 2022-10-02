@@ -9,12 +9,7 @@ ELASTIC_USER=
 ELASTIC_PASSWORD=
 CURL_UESR_OPT=
 
-until nc -w 1 -z "${ELASTIC_HOST}" "${ELASTIC_PORT}"; do
-  echo >&2 "Elastic service is unavailable - sleeping"
-  sleep 60
-done
-sleep 2
-echo >&2 "Elastic service is up - executing observability configurations"
+echo >&2 "Applying index configurations on ElasticSearch"
 
 if [ -n "${ELASTIC_USER}" ]; then
   CURL_UESR_OPT="-u ${ELASTIC_USER}:${ELASTIC_PASSWORD}"
@@ -51,6 +46,8 @@ curl --header "Content-Type: application/json" -X POST "http://${ELASTIC_HOST}:$
     }
   }
 }'
+
+echo >&2 "Applying index, visualizations and dashboard in Kibana"
 
 ###importing the actual index, dashboard and visualizations
 curl ${CURL_UESR_OPT} -X POST "http://${KIBANA_HOST}:${KIBANA_PORT}/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@kibana-jaeger-index.ndjson
